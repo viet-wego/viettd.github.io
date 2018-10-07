@@ -1,71 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
-        <meta charset="utf-8" />
-        <title>Viet's Blog</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
-        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Viet's Blog Atom Feed" />
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <title>Viet's Blog</title>
+
+    <link rel="stylesheet" href="/theme/css/normalize.css" />
+    <link rel="stylesheet" href="/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="/theme/css/style.css" />
+    <link rel="stylesheet" href="/theme/css/pygments.css" />	
+    <script src="/theme/js/custom.modernizr.js"></script>
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+        <link href="feeds/all.atom.xml" rel="alternate" title="Viet's Blog" type="application/atom+xml">
+
 </head>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Viet's Blog </a></h1>
-                <nav><ul>
-                    <li><a href="/category/misc.html">misc</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+<body>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/My-first-post.html">My first test post</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2018-10-07T15:46:00+08:00">
-                Published: Sun 07 October 2018
-        </abbr>
-		<br />
-        <abbr class="modified" title="2018-10-07T15:47:00+08:00">
-                Updated: Sun 07 October 2018
-        </abbr>
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="">Viet's Blog</a></h1>
+    </div>
+</div>
+</div>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/viet-tran.html">Viet Tran</a>
-        </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
-<p>tags: <a href="/tag/first.html">first</a> <a href="/tag/misc.html">misc</a> </p>
-</footer><!-- /.post-info --><p>This is the <em>first post</em> from my Pelican blog. <strong>YAY!</strong></p>                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
 
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+<!-- Main Page Content and Sidebar -->
+<div class="row">
 
-</body>
-</html>
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="/My-first-post.html"><h3 class="article-title">My first test post</h3></a>
+<h6 class="subheader" title="2018-10-07T15:46:00+08:00">Sun 07 October 2018
+</h6>
+
+
+<p>This is the <em>first post</em> from my Pelican blog. <strong>YAY!</strong></p><p class="subheader">Category: <a href="/category/misc.html">misc</a>
+
+    Tagged: 
+    <a href="/tag/first.html">first </a>
+    <a href="/tag/misc.html">misc </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="/archives.html">Archives</a>
+            <li><a href="/tags.html">Tags</a>
+
+
+                <li><a href="/feeds/all.atom.xml" rel="alternate">Atom feed</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="/category/misc.html">misc</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://getpelican.com/">Pelican</a></li>
+            <li><a href="http://python.org/">Python.org</a></li>
+            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+            <li><a href="#">You can modify those links in your config file</a></li>
+        </ul>
+		
+        <h5 class="sidebar-title">Social</h5>
+        <ul class="side-nav">
+            <li><a href="#">You can add links in your config file</a></li>
+            <li><a href="#">Another social link</a></li>
+        </ul>
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>Viet's Blog by Viet Tran</p>
+            </div>
+            </div>
+    </div>
+</footer>
