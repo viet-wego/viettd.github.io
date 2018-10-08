@@ -156,10 +156,34 @@ host    all             all             all                     md5
 
 </li>
 </ol>
+<h3>Configure PostgreSQL</h3>
+<p>Below is basic settings for <strong>postgresql.conf</strong>. Please see <a href="#References">References</a> for more detail.</p>
+<ol>
+<li>
+<p>Memory:</p>
+<div class="highlight"><pre><span></span>shared_buffers = 3758MB         # 1/4th system available RAM
+work_mem = 10MB                 # up to 1/4(RAM)/max_connections
+</pre></div>
+
+
+</li>
+<li>
+<p>Query turning</p>
+<div class="highlight"><pre><span></span>random_page_cost = 2.0          # using 1.5 or 2.0 for SSD
+effective_cache_size = 11GB     # 3/4th system available RAM or sum of free &amp;amp; cached value from free -h command
+</pre></div>
+
+
+</li>
+<li>
+<p>Remember to save the file and restart postgresql service.</p>
+</li>
+</ol>
 <hr>
-<p>References:</p>
+<h3>References</h3>
 <ul>
 <li><a href="https://cloud.google.com/community/tutorials/setting-up-postgres">How to Set Up PostgreSQL on Google Compute Engine</a></li>
+<li><a href="https://severalnines.com/blog/setting-optimal-environment-postgresql">Setting Up an Optimal Environment for PostgreSQL</a></li>
 </ul></div>
 	</div>
 		<footer>

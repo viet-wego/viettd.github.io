@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Get the shit done</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-10-08T13:40:00+08:00</updated><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T13:40:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want. &lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Get the shit done</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-10-08T17:59:00+08:00</updated><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T17:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want. &lt;/p&gt;
 &lt;h3&gt;Add PostgreSQL repository to &lt;strong&gt;apt&lt;/strong&gt; package list&lt;/h3&gt;
 &lt;p&gt;Ubuntu only comes with a default version of PostgreSQL. Because we need to install a specific version needed for our work. So we will add the PosgreSQL repository to our oackage list.&lt;/p&gt;
 &lt;ol&gt;
@@ -97,8 +97,32 @@ host    all             all             all                     md5
 
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h3&gt;Configure PostgreSQL&lt;/h3&gt;
+&lt;p&gt;Below is basic settings for &lt;strong&gt;postgresql.conf&lt;/strong&gt;. Please see &lt;a href="#References"&gt;References&lt;/a&gt; for more detail.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Memory:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;shared_buffers = 3758MB         # 1/4th system available RAM
+work_mem = 10MB                 # up to 1/4(RAM)/max_connections
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Query turning&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;random_page_cost = 2.0          # using 1.5 or 2.0 for SSD
+effective_cache_size = 11GB     # 3/4th system available RAM or sum of free &amp;amp;amp; cached value from free -h command
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Remember to save the file and restart postgresql service.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 &lt;hr&gt;
-&lt;p&gt;References:&lt;/p&gt;
+&lt;h3&gt;References&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://cloud.google.com/community/tutorials/setting-up-postgres"&gt;How to Set Up PostgreSQL on Google Compute Engine&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://severalnines.com/blog/setting-optimal-environment-postgresql"&gt;Setting Up an Optimal Environment for PostgreSQL&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content><category term="postgresql"></category><category term="ubuntu"></category><category term="linux"></category><category term="devops"></category></entry></feed>
