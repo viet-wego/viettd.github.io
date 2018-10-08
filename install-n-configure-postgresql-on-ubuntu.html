@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Get the shit done</title>
+	<meta name="description" content="">
+	<meta name="author" content="Viet Tran">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://viettran.me/theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="https://viettran.me/theme/bootstrap.min.css" rel="stylesheet">
+	<link href="https://viettran.me/theme/local.css" rel="stylesheet">
+	<link href="https://viettran.me/theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+	<link href="https://viettran.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Get the shit done Atom Feed" />
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="https://viettran.me/">Get the shit done</a>
+			<ul class="nav">
+					<li class="active"><a href="https://viettran.me/category/tutorial.html">tutorial</a></li>
+			</ul>
+			<p class="pull-right"><a href="https://viettran.me/archives.html">[archives]</a> <a href="https://viettran.me/tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="https://github.com/viettd">GitHub</a></li>
+				<li><a href="https://twitter.com/tdvietus">Twitter</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='article'>
+		<div class="page-header"><h1>Install & configure PostgreSQL on Ubuntu</h1></div>
+		<div class="well small">Permalink: <a class="more" href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html">2018-10-08 13:40:00+08:00</a>
+by <a class="url fn" href="https://viettran.me/author/viet-tran.html">Viet Tran </a>
+ in <a href="https://viettran.me/category/tutorial.html">tutorial</a>
+tags: <a href="https://viettran.me/tag/postgresql.html">postgresql</a> <a href="https://viettran.me/tag/ubuntu.html">ubuntu</a> <a href="https://viettran.me/tag/linux.html">linux</a> <a href="https://viettran.me/tag/devops.html">devops</a> </div>
+		<div><p>This tutorial is using <a href="https://en.wikipedia.org/wiki/Vi">vi</a> editor. You can use any editor you want. </p>
+<h3>Add PostgreSQL repository to <strong>apt</strong> package list</h3>
+<p>Ubuntu only comes with a default version of PostgreSQL. Because we need to install a specific version needed for our work. So we will add the PosgreSQL repository to our oackage list.</p>
+<ol>
+<li>
+<p>Edit this file:</p>
+<div class="highlight"><pre><span></span>sudo vi /etc/apt/sources.list.d/pgdg.list
+</pre></div>
+
+
+</li>
+<li>
+<p>Add this line:</p>
+<div class="highlight"><pre><span></span><span class="k">deb</span> <span class="s">http://apt.postgresql.org/pub/repos/apt/</span> <span class="kp">xenial-pgdg</span> <span class="kp">main</span>
+</pre></div>
+
+
+</li>
+<li>
+<p>Import the repository signing key, and update the package list:</p>
+<div class="highlight"><pre><span></span>wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+</pre></div>
+
+
+</li>
+</ol>
+<h3>Install PostgreSQL</h3>
+<ol>
+<li>
+<p>Our current system requires PostgreSQL 9.4. So I will install version <strong>9.4</strong>. Replace it with your choice:</p>
+<div class="highlight"><pre><span></span>sudo apt-get install -y postgresql-client-9.4 postgresql-9.4 postgresql-contrib-9.4 libpq-dev postgresql-server-dev-9.4
+</pre></div>
+
+
+</li>
+<li>
+<p>PostgreSQL created a default user, named <strong>postgres</strong>, during installation. This user doesn't yet have a password, so you'll need to set one.</p>
+<ul>
+<li>
+<p>Run <strong>PSQL</strong> as user <strong>postgres</strong>, instead of <strong>root</strong>, accesssing the database named <strong>postgres</strong>:</p>
+<div class="highlight"><pre><span></span>sudo -u postgres psql postgres
+</pre></div>
+
+
+</li>
+<li>
+<p>You should see the PSQL command prompt, which looks like this: <code>postgres=#</code>.
+Set the password with this command:</p>
+<div class="highlight"><pre><span></span>\password postgres
+</pre></div>
+
+
+<p>When prompted, enter and confirm the password you've chosen</p>
+</li>
+<li>
+<p>Install the <strong>adminpack</strong> extension to use with some administration and management tools. The console prints <strong>CREATE EXTENSION</strong> when successful.</p>
+<div class="highlight"><pre><span></span>CREATE EXTENSION adminpack;
+</pre></div>
+
+
+</li>
+</ul>
+<p>2d. Enter <code>\q</code> to exit <strong>PSQL</strong></p>
+</li>
+</ol>
+<h3>Allow access to PostgreSQL</h3>
+<p>PostgreSQL only allows access from localhost. We need to change its configuratin to allow remote access.</p>
+<ol>
+<li>
+<p>Edit <strong>pg_hba.conf</strong></p>
+<div class="highlight"><pre><span></span>sudo vi /etc/postgresql/9.4/main/pg_hba.conf
+</pre></div>
+
+
+<p>This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all clients by adding this:</p>
+<div class="highlight"><pre><span></span># allow access from all hosts
+host    all             all             all                     md5
+</pre></div>
+
+
+</li>
+<li>
+<p>Edit <strong>postgresql.conf</strong></p>
+<div class="highlight"><pre><span></span>sudo vi /etc/postgresql/9.4/main/postgresql.conf
+</pre></div>
+
+
+<p>Find this <code>#listen_addresses = 'localhost'</code> &amp; replace with <code>listen_addresses = '*'</code>.</p>
+</li>
+<li>
+<p>Save the file &amp; exit. Then restart <strong>postgresql</strong> service:</p>
+<div class="highlight"><pre><span></span>sudo service postgresql restart
+</pre></div>
+
+
+</li>
+</ol>
+<hr>
+<p>References:</p>
+<ul>
+<li><a href="https://cloud.google.com/community/tutorials/setting-up-postgres">How to Set Up PostgreSQL on Google Compute Engine</a></li>
+</ul></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; Viet Tran</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>
