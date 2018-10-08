@@ -1,6 +1,6 @@
 Title: Install & configure PostgreSQL on Ubuntu
 Date: 2018-10-08 13:40
-Modified: 2018-10-08 13:40
+Modified: 2018-10-08 17:59
 Category: tutorial
 Tags: postgresql, ubuntu, linux, devops
 Slug: install-n-configure-postgresql-on-ubuntu
@@ -74,9 +74,25 @@ PostgreSQL only allows access from localhost. We need to change its configuratin
 
         sudo service postgresql restart
 
+### Configure PostgreSQL
+
+Below is basic settings for **postgresql.conf**. Please see [References](#References) for more detail.
+
+1. Memory:
+
+        shared_buffers = 3758MB         # 1/4th system available RAM
+        work_mem = 10MB                 # up to 1/4(RAM)/max_connections
+
+1. Query turning
+
+        random_page_cost = 2.0          # using 1.5 or 2.0 for SSD
+        effective_cache_size = 11GB     # 3/4th system available RAM or sum of free & cached value from free -h command
+
+1. Remember to save the file and restart postgresql service.
 
 ---
 
-References:
+### References
 
 - [How to Set Up PostgreSQL on Google Compute Engine](https://cloud.google.com/community/tutorials/setting-up-postgres)
+- [Setting Up an Optimal Environment for PostgreSQL](https://severalnines.com/blog/setting-optimal-environment-postgresql)
