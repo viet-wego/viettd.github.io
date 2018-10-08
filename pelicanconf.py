@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'Viet Tran'
-SITENAME = "Viet's Blog"
+SITENAME = "Get the shit done"
 SITEURL = ''
 
 PATH = 'content'
@@ -26,12 +26,12 @@ AUTHOR_FEED_RSS = None
 #          ('You can modify those links in your config file', '#'),)
 
 # Social widget
-# SOCIAL = (('You can add links in your config file', '#'),
-#           ('Another social link', '#'),)
+SOCIAL = (('GitHub', 'https://github.com/viettd'),
+          ('Twitter', 'https://twitter.com/tdvietus'))
 
 DEFAULT_PAGINATION = 11
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+# RELATIVE_URLS = True
 
-THEME = 'tuxlite_zf'
+THEME = 'bootstrap'
