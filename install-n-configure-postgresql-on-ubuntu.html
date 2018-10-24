@@ -96,7 +96,7 @@
 
 </li>
 <li>
-<p>Add this line:</p>
+<p>Add this line (replace <code>xenial</code> with your Ubuntu code name):</p>
 <div class="highlight"><pre><span></span><span class="k">deb</span> <span class="s">http://apt.postgresql.org/pub/repos/apt/</span> <span class="kp">xenial-pgdg</span> <span class="kp">main</span>
 </pre></div>
 
@@ -114,8 +114,8 @@ sudo apt-get update
 <h3>Install PostgreSQL</h3>
 <ol>
 <li>
-<p>Our current system requires PostgreSQL 9.4. So I will install version <strong>9.4</strong>. Replace it with your choice:</p>
-<div class="highlight"><pre><span></span>sudo apt-get install -y postgresql-client-9.4 postgresql-9.4 postgresql-contrib-9.4 libpq-dev postgresql-server-dev-9.4
+<p>Our current system requires PostgreSQL 9.5. So I will install version <strong>9.5</strong>. Replace it with your choice:</p>
+<div class="highlight"><pre><span></span>sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 </pre></div>
 
 
@@ -160,8 +160,8 @@ Set the password with this command:</p>
 
 
 <p>This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all clients by adding this:</p>
-<div class="highlight"><pre><span></span># allow access from all hosts
-host    all             all             all                     md5
+<div class="highlight"><pre><span></span># allow access from my internal network with md5 password
+host    all             10.20.0.0/16             all                     md5
 </pre></div>
 
 
@@ -172,7 +172,7 @@ host    all             all             all                     md5
 </pre></div>
 
 
-<p>Find this <code>#listen_addresses = 'localhost'</code> &amp; replace with <code>listen_addresses = '*'</code>.</p>
+<p>Find this <code>#listen_addresses = 'localhost'</code> &amp; replace with <code>listen_addresses = '*'</code> to allow access from other servers.</p>
 </li>
 <li>
 <p>Save the file &amp; exit. Then restart <strong>postgresql</strong> service:</p>
@@ -187,7 +187,7 @@ host    all             all             all                     md5
 <ol>
 <li>
 <p>Memory:</p>
-<div class="highlight"><pre><span></span>shared_buffers = 3758MB         # 1/4th system available RAM
+<div class="highlight"><pre><span></span>shared_buffers = 3GB         # 1/4 system available RAM
 work_mem = 10MB                 # up to 1/4(RAM)/max_connections
 </pre></div>
 
@@ -195,8 +195,8 @@ work_mem = 10MB                 # up to 1/4(RAM)/max_connections
 </li>
 <li>
 <p>Query turning</p>
-<div class="highlight"><pre><span></span>random_page_cost = 2.0          # using 1.5 or 2.0 for SSD
-effective_cache_size = 11GB     # 3/4th system available RAM or sum of free &amp;amp; cached value from free -h command
+<div class="highlight"><pre><span></span>random_page_cost = 1.5          # using 1.5 or 2.0 for SSD
+effective_cache_size = 10GB     # 3/4 system available RAM or sum of free &amp;amp; cached value from free -h command
 </pre></div>
 
 
