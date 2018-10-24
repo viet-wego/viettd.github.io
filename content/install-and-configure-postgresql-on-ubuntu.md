@@ -1,6 +1,6 @@
 Title: Install & configure PostgreSQL on Ubuntu
 Date: 2018-10-08 13:40
-Modified: 2018-10-08 17:59
+Modified: 2018-10-08 18:59
 Category: tutorial
 Tags: postgresql, ubuntu, linux, devops
 Slug: install-n-configure-postgresql-on-ubuntu
@@ -17,7 +17,7 @@ Ubuntu only comes with a default version of PostgreSQL. Because we need to insta
 
         sudo vi /etc/apt/sources.list.d/pgdg.list
 
-1. Add this line:
+1. Add this line (replace `xenial` with your Ubuntu code name):
 
         deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
 
@@ -28,9 +28,9 @@ Ubuntu only comes with a default version of PostgreSQL. Because we need to insta
 
 ### Install PostgreSQL
 
-1. Our current system requires PostgreSQL 9.4. So I will install version **9.4**. Replace it with your choice:
+1. Our current system requires PostgreSQL 9.5. So I will install version **9.5**. Replace it with your choice:
 
-        sudo apt-get install -y postgresql-client-9.4 postgresql-9.4 postgresql-contrib-9.4 libpq-dev postgresql-server-dev-9.4
+        sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 
 
 1. PostgreSQL created a default user, named **postgres**, during installation. This user doesn't yet have a password, so you'll need to set one.
@@ -61,14 +61,14 @@ PostgreSQL only allows access from localhost. We need to change its configuratin
         sudo vi /etc/postgresql/9.4/main/pg_hba.conf
     This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all clients by adding this:
 
-        # allow access from all hosts
-        host    all             all             all                     md5
+        # allow access from my internal network with md5 password
+        host    all             10.20.0.0/16             all                     md5
 
 
 2. Edit **postgresql.conf**
 
         sudo vi /etc/postgresql/9.4/main/postgresql.conf
-    Find this `#listen_addresses = 'localhost'` & replace with `listen_addresses = '*'`.
+    Find this `#listen_addresses = 'localhost'` & replace with `listen_addresses = '*'` to allow access from other servers.
 
 3. Save the file & exit. Then restart **postgresql** service:
 
@@ -80,13 +80,13 @@ Below is basic settings for **postgresql.conf**. Please see [References](#Refere
 
 1. Memory:
 
-        shared_buffers = 3758MB         # 1/4th system available RAM
+        shared_buffers = 3GB         # 1/4 system available RAM
         work_mem = 10MB                 # up to 1/4(RAM)/max_connections
 
 1. Query turning
 
-        random_page_cost = 2.0          # using 1.5 or 2.0 for SSD
-        effective_cache_size = 11GB     # 3/4th system available RAM or sum of free & cached value from free -h command
+        random_page_cost = 1.5          # using 1.5 or 2.0 for SSD
+        effective_cache_size = 10GB     # 3/4 system available RAM or sum of free & cached value from free -h command
 
 1. Remember to save the file and restart postgresql service.
 
