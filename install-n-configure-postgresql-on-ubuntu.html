@@ -86,7 +86,7 @@
 
         <p>This tutorial is using <a href="https://en.wikipedia.org/wiki/Vi">vi</a> editor. You can use any editor you want. </p>
 <h3>Add PostgreSQL repository to <strong>apt</strong> package list</h3>
-<p>Ubuntu only comes with a default version of PostgreSQL. Because we need to install a specific version needed for our work. So we will add the PosgreSQL repository to our oackage list.</p>
+<p>Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.</p>
 <ol>
 <li>
 <p>Edit this file:</p>
@@ -96,7 +96,7 @@
 
 </li>
 <li>
-<p>Add this line (replace <code>xenial</code> with your Ubuntu code name):</p>
+<p>Add this line (replace <code>xenial</code> with your Ubuntu code name, I use 16.04):</p>
 <div class="highlight"><pre><span></span><span class="k">deb</span> <span class="s">http://apt.postgresql.org/pub/repos/apt/</span> <span class="kp">xenial-pgdg</span> <span class="kp">main</span>
 </pre></div>
 

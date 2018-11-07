@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran - tutorial</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/tutorial.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-10-08T18:59:00+08:00</updated><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want. &lt;/p&gt;
 &lt;h3&gt;Add PostgreSQL repository to &lt;strong&gt;apt&lt;/strong&gt; package list&lt;/h3&gt;
-&lt;p&gt;Ubuntu only comes with a default version of PostgreSQL. Because we need to install a specific version needed for our work. So we will add the PosgreSQL repository to our oackage list.&lt;/p&gt;
+&lt;p&gt;Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;Edit this file:&lt;/p&gt;
@@ -11,7 +11,7 @@
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Add this line (replace &lt;code&gt;xenial&lt;/code&gt; with your Ubuntu code name):&lt;/p&gt;
+&lt;p&gt;Add this line (replace &lt;code&gt;xenial&lt;/code&gt; with your Ubuntu code name, I use 16.04):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;deb&lt;/span&gt; &lt;span class="s"&gt;http://apt.postgresql.org/pub/repos/apt/&lt;/span&gt; &lt;span class="kp"&gt;xenial-pgdg&lt;/span&gt; &lt;span class="kp"&gt;main&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
