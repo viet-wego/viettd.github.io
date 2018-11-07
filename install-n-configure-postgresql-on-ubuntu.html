@@ -113,13 +113,14 @@ sudo apt-get update
 </ol>
 <h3>Install PostgreSQL</h3>
 <ol>
-<li>
-<p>Our current system requires PostgreSQL 9.5. So I will install version <strong>9.5</strong>. Replace it with your choice:</p>
-<div class="highlight"><pre><span></span>sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
+<li>Our current system requires PostgreSQL 9.5. So I will install version <strong>9.5</strong>. Replace it with your choice:<div class="highlight"><pre><span></span>sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 </pre></div>
 
 
 </li>
+</ol>
+<p><em>From version <strong>10</strong> you don't have to install <strong>postgresql-contrib-xx</strong> because it is already added to package <strong>postgresql-xx</strong></em></p>
+<ol>
 <li>
 <p>PostgreSQL created a default user, named <strong>postgres</strong>, during installation. This user doesn't yet have a password, so you'll need to set one.</p>
 <ul>

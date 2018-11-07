@@ -28,13 +28,14 @@ sudo apt-get update
 &lt;/ol&gt;
 &lt;h3&gt;Install PostgreSQL&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;Our current system requires PostgreSQL 9.5. So I will install version &lt;strong&gt;9.5&lt;/strong&gt;. Replace it with your choice:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
+&lt;li&gt;Our current system requires PostgreSQL 9.5. So I will install version &lt;strong&gt;9.5&lt;/strong&gt;. Replace it with your choice:&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;em&gt;From version &lt;strong&gt;10&lt;/strong&gt; you don't have to install &lt;strong&gt;postgresql-contrib-xx&lt;/strong&gt; because it is already added to package &lt;strong&gt;postgresql-xx&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;PostgreSQL created a default user, named &lt;strong&gt;postgres&lt;/strong&gt;, during installation. This user doesn't yet have a password, so you'll need to set one.&lt;/p&gt;
 &lt;ul&gt;
