@@ -1,13 +1,13 @@
 Title: Install & configure PostgreSQL on Ubuntu
 Date: 2018-10-08 13:40
 Modified: 2018-10-08 18:59
-Category: devops
+Category: database
 Tags: postgresql, ubuntu, linux, devops
 Slug: install-n-configure-postgresql-on-ubuntu
 Authors: Viet Tran
 Summary: How to install & configure PostgreSQL on Ubuntu.
 
-This tutorial is using [vi](https://en.wikipedia.org/wiki/Vi) editor. You can use any editor you want. 
+*This tutorial is using [vi](https://en.wikipedia.org/wiki/Vi) editor. You can use any editor you want.*
 
 ### Add PostgreSQL repository to **apt** package list
 
@@ -32,7 +32,7 @@ Ubuntu comes with a default version of PostgreSQL. If we need to install a speci
 
         sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 
-   *From version **10** you don't have to install **postgresql-contrib-xx** because it is already added to package **postgresql-xx***
+    *From version **10** you don't have to install **postgresql-contrib-xx** because it is already added to package **postgresql-xx***
 
 1. PostgreSQL created a default user, named **postgres**, during installation. This user doesn't yet have a password, so you'll need to set one.
 
