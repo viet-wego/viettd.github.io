@@ -1,7 +1,7 @@
 Title: Install & configure PostgreSQL on Ubuntu
 Date: 2018-10-08 13:40
 Modified: 2018-10-08 18:59
-Category: tutorial
+Category: devops
 Tags: postgresql, ubuntu, linux, devops
 Slug: install-n-configure-postgresql-on-ubuntu
 Authors: Viet Tran
@@ -11,13 +11,13 @@ This tutorial is using [vi](https://en.wikipedia.org/wiki/Vi) editor. You can us
 
 ### Add PostgreSQL repository to **apt** package list
 
-Ubuntu only comes with a default version of PostgreSQL. Because we need to install a specific version needed for our work. So we will add the PosgreSQL repository to our oackage list.
+Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.
 
 1. Edit this file:
 
         sudo vi /etc/apt/sources.list.d/pgdg.list
 
-1. Add this line (replace `xenial` with your Ubuntu code name):
+1. Add this line (replace `xenial` with your Ubuntu code name, I use 16.04):
 
         deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
 
@@ -32,6 +32,7 @@ Ubuntu only comes with a default version of PostgreSQL. Because we need to insta
 
         sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 
+   *From version **10** you don't have to install **postgresql-contrib-xx** because it is already added to package **postgresql-xx***
 
 1. PostgreSQL created a default user, named **postgres**, during installation. This user doesn't yet have a password, so you'll need to set one.
 
@@ -50,7 +51,7 @@ Ubuntu only comes with a default version of PostgreSQL. Because we need to insta
 
             CREATE EXTENSION adminpack;
 
-    2d. Enter `\q` to exit **PSQL**
+    - Enter `\q` to exit **PSQL**
 
 ### Allow access to PostgreSQL
 
