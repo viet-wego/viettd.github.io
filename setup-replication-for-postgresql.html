@@ -43,7 +43,7 @@
                 <nav class="navbar">
                     <div class="navbar-inner">
                         <ul class="nav">
-                            <li class="active"><a href="https://viettran.me/category/devops.html">devops</a></li>
+                            <li class="active"><a href="https://viettran.me/category/database.html">database</a></li>
                         </ul>
 
                     </div>
@@ -69,7 +69,7 @@
         by <a class="url fn" href="https://viettran.me/author/viet-tran.html">Viet Tran</a>
     </address>
 
-    in <a href="https://viettran.me/category/devops.html">devops</a>
+    in <a href="https://viettran.me/category/database.html">database</a>
 
     on 2018-11-07
 
@@ -80,13 +80,77 @@
         <a href="https://viettran.me/tag/devops.html">devops</a>
         <a href="https://viettran.me/tag/replication.html">replication</a>
         <a href="https://viettran.me/tag/stanby.html">stanby</a>
+        <a href="https://viettran.me/tag/high-availability.html">high availability</a>
+        <a href="https://viettran.me/tag/load-balancing.html">load balancing</a>
 
 
 
     
 </footer><!-- /.post-info -->
 
-        <p>This tutorial requires PostgreSQL to be installed on your system. Please take a look at this if you don't have: <a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html">Install &amp; configure PostgreSQL on Ubuntu</a> .</p>
+        <p>If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the <a href="#References">References</a>. In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.</p>
+<h3>Install PostgreSQL</h3>
+<p>You will need 2 instances of PostgreSQL. For detail please see <a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html">Install &amp; configure PostgreSQL on Ubuntu</a>.</p>
+<h3>Prepare Master Node</h3>
+<ol>
+<li>
+<p>Create a user for replication &amp; allow traffic for replication server</p>
+<div class="highlight"><pre><span></span>sudo -u postgres createuser -U postgres rep_user -P -c 5 --replication
+</pre></div>
+
+
+<ul>
+<li>Replace <code>rep_user</code> with your replication user.</li>
+<li>Replace <code>5</code> with max connections can be used for replication.</li>
+<li>Your will need to provide a powerful password for this user at the command prompt.</li>
+</ul>
+<p>Edit <strong>pg_hba.conf</strong> file. By default, you can find it at <code>/etc/postgresql/[your_postgresql_version]/main/pg_hba.conf</code>.</p>
+<div class="highlight"><pre><span></span>sudo vi /etc/postgresql/10/main/pg_hba.conf
+</pre></div>
+
+
+<ul>
+<li>Allow repication connections<div class="highlight"><pre><span></span># Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password
+host    replication     rep_user             10.240.0.0/16           md5
+</pre></div>
+
+
+<p>If you want to only allow from 1 specific IP, can use CIDR <code>[your_replication_server_ip]/32</code>. Ex: 10.240.0.10/32</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Configurate WAL</p>
+<ul>
+<li>Create a directory to store archive file<div class="highlight"><pre><span></span>mkdir -p /data/postgresql/10/main/archive
+- Edit **postgresql.conf**
+
+sudo vi /etc/postgresql/10/main/postgresql.conf
+</pre></div>
+
+
+<ul>
+<li>WAL level<div class="highlight"><pre><span></span># postgresql &amp;gt;= 9.6
+wal_level = replica
+</pre></div>
+
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3>References</h3>
+<ul>
+<li>
+<p><a href="https://cloud.google.com/community/tutorials/setting-up-postgres-hot-standby">How to Set Up PostgreSQL for High Availability and Replication with Hot Standby</a></p>
+</li>
+<li>
+<p><a href="https://www.postgresql.org/docs/10/high-availability.html">High Availability, Load Balancing, and Replication (PostgreSQL's official documentation)</a></p>
+</li>
+</ul>
 
       </div><!-- /.entry-content -->
 
