@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-10-08T18:59:00+08:00</updated><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want. &lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-11-07T20:00:00+08:00</updated><entry><title>Setup replication for PostgreSQL</title><link href="https://viettran.me/setup-replication-for-postgresql.html" rel="alternate"></link><published>2018-11-07T20:00:00+08:00</published><updated>2018-11-07T20:00:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-07:/setup-replication-for-postgresql.html</id><summary type="html">&lt;p&gt;How to setup replication for PostgreSQL using hot stanby.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This tutorial requires PostgreSQL to be installed on your system. Please take a look at this if you don't have: &lt;a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html"&gt;Install &amp;amp; configure PostgreSQL on Ubuntu&lt;/a&gt; .&lt;/p&gt;</content><category term="postgresql"></category><category term="ubuntu"></category><category term="linux"></category><category term="devops"></category><category term="replication"></category><category term="stanby"></category></entry><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want. &lt;/p&gt;
 &lt;h3&gt;Add PostgreSQL repository to &lt;strong&gt;apt&lt;/strong&gt; package list&lt;/h3&gt;
 &lt;p&gt;Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.&lt;/p&gt;
 &lt;ol&gt;
@@ -62,8 +62,10 @@ Set the password with this command:&lt;/p&gt;
 
 
 &lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Enter &lt;code&gt;\q&lt;/code&gt; to exit &lt;strong&gt;PSQL&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;2d. Enter &lt;code&gt;\q&lt;/code&gt; to exit &lt;strong&gt;PSQL&lt;/strong&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3&gt;Allow access to PostgreSQL&lt;/h3&gt;
