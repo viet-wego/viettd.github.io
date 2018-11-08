@@ -91,7 +91,7 @@
         <p>If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the <a href="#References">References</a>. In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.</p>
 <h3>Install PostgreSQL</h3>
 <p>You will need 2 instances of PostgreSQL. For detail please see <a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html">Install &amp; configure PostgreSQL on Ubuntu</a>.</p>
-<h3>Prepare Master Node</h3>
+<h3>Prepare Master Server</h3>
 <ol>
 <li>
 <p>Create a user for replication &amp; allow traffic for replication server</p>
@@ -122,7 +122,9 @@ host    replication     rep_user             10.240.0.0/16           md5
 <li>
 <p>Configurate WAL</p>
 <ul>
-<li>Create a directory to store archive file<div class="highlight"><pre><span></span>mkdir -p /data/postgresql/10/main/archive
+<li>
+<p>Create a directory to store archive file</p>
+<div class="highlight"><pre><span></span>mkdir -p /data/postgresql/10/main/archive
 - Edit **postgresql.conf**
 
 sudo vi /etc/postgresql/10/main/postgresql.conf
@@ -130,18 +132,94 @@ sudo vi /etc/postgresql/10/main/postgresql.conf
 
 
 <ul>
-<li>WAL level<div class="highlight"><pre><span></span># postgresql &amp;gt;= 9.6
-wal_level = replica
+<li>
+<p>PostgreSQL &gt;= 9.6</p>
+<div class="highlight"><pre><span></span>wal_level = replica
+archive_mode = on
+# using the directory you just created above
+archive_command = &#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;&amp;amp; cp %p /data/postgresql/10/main/archive/%f&#39;
 </pre></div>
 
 
+</li>
+<li>
+<p>PostgreSQL &lt;= 9.5</p>
+<div class="highlight"><pre><span></span>wal_level = hot_standby
+archive_mode = on
+# using the directory you just created above
+archive_command = &#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;&amp;amp; cp %p /data/postgresql/10/main/archive/%f&#39;
+- Restart service to make the changes effective
+</pre></div>
+
+
+<p>sudo service postgresql restart</p>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<hr>
+<h3>Prepare Replication Server</h3>
+<ol>
+<li>
+<p>Stop service</p>
+<div class="highlight"><pre><span></span>sudo service postgresql stop
+</pre></div>
+
+
+<ol>
+<li>Initialize data</li>
+<li>
+<p>Rename old data directory</p>
+<div class="highlight"><pre><span></span>    # replace /data/postgresql/10/main with your postgresql data directory (configurated in postgresql.conf)
+    sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
+</pre></div>
+
+
+<ul>
+<li>Run backup utility to copy data from Master<div class="highlight"><pre><span></span>sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
+ *Replace **/data/postgresql/10/main** with your data directory &amp;amp; **rep_user** with your replication user above. You will need to provide password for replication user.*
+</pre></div>
+
+
+<ul>
+<li>Configurate replication</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Turn on Hot Standby</p>
+<div class="highlight"><pre><span></span>    sudo vi  /etc/postgresql/10/main/postgresql.conf
+</pre></div>
+
+
+<p>Uncomment this line</p>
+<div class="highlight"><pre><span></span>    hot_standby = on
+   - Create recovery file
+
+    sudo cp /usr/share/postgresql/10/recovery.conf.sample /data/postgresql/10/main/recovery.conf
+    sudo vi /data/postgresql/10/main/recovery.conf
+</pre></div>
+
+
+<p>Configurate stanby</p>
+<div class="highlight"><pre><span></span>    standby_mode = on
+    primary_conninfo = &#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&#39;
+</pre></div>
+
+
+<ol>
+<li>Start service</li>
+</ol>
+<p>sudo service postgresql stop
+Now your Replication Server can serve read-only query. If you want to promote it to Master can use this command:</p>
+<h1>replace 10 with your postgresql version</h1>
+<h2>sudo -u postgres pg_ctlcluster 10 main promote</h2>
+</li>
+</ol>
+</li>
+</ol>
 <h3>References</h3>
 <ul>
 <li>
