@@ -9,24 +9,26 @@ Summary: How to install & configure PostgreSQL on Ubuntu.
 
 *This tutorial is using [vi](https://en.wikipedia.org/wiki/Vi) editor. You can use any editor you want.*
 
-### Add PostgreSQL repository to **apt** package list
+## Add PostgreSQL repository to **apt** package list
 
 Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.
 
-1. Edit this file:
+1. **Edit this file**
 
         sudo vi /etc/apt/sources.list.d/pgdg.list
 
-1. Add this line (replace `xenial` with your Ubuntu code name, I use 16.04):
+2. **Add this line**
 
         deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
 
-1. Import the repository signing key, and update the package list:
+    *Replace `xenial` with your Ubuntu code name, I use `xenial` because I'm using Ubuntu 16.04 LTS*
+
+3. **Import the repository signing key, and update the package list**
 
         wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
         sudo apt-get update
 
-### Install PostgreSQL
+## Install PostgreSQL
 
 1. Our current system requires PostgreSQL 9.5. So I will install version **9.5**. Replace it with your choice:
 
@@ -34,7 +36,7 @@ Ubuntu comes with a default version of PostgreSQL. If we need to install a speci
 
     *From version **10** you don't have to install **postgresql-contrib-xx** because it is already added to package **postgresql-xx***
 
-1. PostgreSQL created a default user, named **postgres**, during installation. This user doesn't yet have a password, so you'll need to set one.
+2. PostgreSQL created a default user, named **postgres**, during installation. This user doesn't yet have a password, so you'll need to set one.
 
     - Run **PSQL** as user **postgres**, instead of **root**, accesssing the database named **postgres**:
 
@@ -53,7 +55,7 @@ Ubuntu comes with a default version of PostgreSQL. If we need to install a speci
 
     - Enter `\q` to exit **PSQL**
 
-### Allow access to PostgreSQL
+## Allow access to PostgreSQL
 
 PostgreSQL only allows access from localhost. We need to change its configuratin to allow remote access.
 
@@ -65,35 +67,35 @@ PostgreSQL only allows access from localhost. We need to change its configuratin
         # allow access from my internal network with md5 password
         host    all             10.20.0.0/16             all                     md5
 
-
 2. Edit **postgresql.conf**
 
         sudo vi /etc/postgresql/9.4/main/postgresql.conf
+
     Find this `#listen_addresses = 'localhost'` & replace with `listen_addresses = '*'` to allow access from other servers.
 
 3. Save the file & exit. Then restart **postgresql** service:
 
         sudo service postgresql restart
 
-### Configure PostgreSQL
+## Configure PostgreSQL
 
 Below is basic settings for **postgresql.conf**. Please see [References](#References) for more detail.
 
-1. Memory:
+1. **Memory**
 
         shared_buffers = 3GB         # 1/4 system available RAM
         work_mem = 10MB                 # up to 1/4(RAM)/max_connections
 
-1. Query turning
+2. **Query turning**
 
         random_page_cost = 1.5          # using 1.5 or 2.0 for SSD
         effective_cache_size = 10GB     # 3/4 system available RAM or sum of free & cached value from free -h command
 
-1. Remember to save the file and restart postgresql service.
+3. **Remember to save the file and restart postgresql service.**
 
 ---
 
-### References
+## References
 
 - [How to Set Up PostgreSQL on Google Compute Engine](https://cloud.google.com/community/tutorials/setting-up-postgres)
 - [Setting Up an Optimal Environment for PostgreSQL](https://severalnines.com/blog/setting-optimal-environment-postgresql)
