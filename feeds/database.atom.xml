@@ -160,11 +160,11 @@ sudo chown -R postgres:postgres /data/postgresql
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Now your &lt;strong&gt;Replication Server&lt;/strong&gt; can serve read-only query. If you want to promote it to &lt;strong&gt;Master&lt;/strong&gt; can use this command:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # replace 10 with your postgresql version
-    sudo -u postgres pg_ctlcluster 10 main promote
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    sudo -u postgres pg_ctlcluster 10 main promote
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;p&gt;&lt;em&gt;Replace &lt;code&gt;10&lt;/code&gt; with your postgresql version&lt;/em&gt;.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;References&lt;/h2&gt;
 &lt;ul&gt;
@@ -175,25 +175,26 @@ sudo chown -R postgres:postgres /data/postgresql
 &lt;p&gt;&lt;a href="https://www.postgresql.org/docs/10/high-availability.html"&gt;High Availability, Load Balancing, and Replication (PostgreSQL's official documentation)&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;</content><category term="postgresql"></category><category term="ubuntu"></category><category term="linux"></category><category term="devops"></category><category term="replication"></category><category term="stanby"></category><category term="high availability"></category><category term="load balancing"></category></entry><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;em&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want.&lt;/em&gt;&lt;/p&gt;
-&lt;h3&gt;Add PostgreSQL repository to &lt;strong&gt;apt&lt;/strong&gt; package list&lt;/h3&gt;
+&lt;h2&gt;Add PostgreSQL repository to &lt;strong&gt;apt&lt;/strong&gt; package list&lt;/h2&gt;
 &lt;p&gt;Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;Edit this file:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Edit this file&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi /etc/apt/sources.list.d/pgdg.list
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Add this line (replace &lt;code&gt;xenial&lt;/code&gt; with your Ubuntu code name, I use 16.04):&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Add this line&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;deb&lt;/span&gt; &lt;span class="s"&gt;http://apt.postgresql.org/pub/repos/apt/&lt;/span&gt; &lt;span class="kp"&gt;xenial-pgdg&lt;/span&gt; &lt;span class="kp"&gt;main&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;p&gt;&lt;em&gt;Replace &lt;code&gt;xenial&lt;/code&gt; with your Ubuntu code name, I use &lt;code&gt;xenial&lt;/code&gt; because I'm using Ubuntu 16.04 LTS&lt;/em&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Import the repository signing key, and update the package list:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Import the repository signing key, and update the package list&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt-get update
 &lt;/pre&gt;&lt;/div&gt;
@@ -201,7 +202,7 @@ sudo apt-get update
 
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3&gt;Install PostgreSQL&lt;/h3&gt;
+&lt;h2&gt;Install PostgreSQL&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;Our current system requires PostgreSQL 9.5. So I will install version &lt;strong&gt;9.5&lt;/strong&gt;. Replace it with your choice:&lt;/p&gt;
@@ -243,7 +244,7 @@ Set the password with this command:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3&gt;Allow access to PostgreSQL&lt;/h3&gt;
+&lt;h2&gt;Allow access to PostgreSQL&lt;/h2&gt;
 &lt;p&gt;PostgreSQL only allows access from localhost. We need to change its configuratin to allow remote access.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -275,11 +276,11 @@ host    all             10.20.0.0/16             all                     md5
 
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3&gt;Configure PostgreSQL&lt;/h3&gt;
+&lt;h2&gt;Configure PostgreSQL&lt;/h2&gt;
 &lt;p&gt;Below is basic settings for &lt;strong&gt;postgresql.conf&lt;/strong&gt;. Please see &lt;a href="#References"&gt;References&lt;/a&gt; for more detail.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;Memory:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Memory&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;shared_buffers = 3GB         # 1/4 system available RAM
 work_mem = 10MB                 # up to 1/4(RAM)/max_connections
 &lt;/pre&gt;&lt;/div&gt;
@@ -287,7 +288,7 @@ work_mem = 10MB                 # up to 1/4(RAM)/max_connections
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Query turning&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Query turning&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;random_page_cost = 1.5          # using 1.5 or 2.0 for SSD
 effective_cache_size = 10GB     # 3/4 system available RAM or sum of free &amp;amp;amp; cached value from free -h command
 &lt;/pre&gt;&lt;/div&gt;
@@ -295,11 +296,11 @@ effective_cache_size = 10GB     # 3/4 system available RAM or sum of free &amp;a
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Remember to save the file and restart postgresql service.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Remember to save the file and restart postgresql service.&lt;/strong&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
-&lt;h3&gt;References&lt;/h3&gt;
+&lt;h2&gt;References&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://cloud.google.com/community/tutorials/setting-up-postgres"&gt;How to Set Up PostgreSQL on Google Compute Engine&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://severalnines.com/blog/setting-optimal-environment-postgresql"&gt;Setting Up an Optimal Environment for PostgreSQL&lt;/a&gt;&lt;/li&gt;

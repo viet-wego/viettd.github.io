@@ -249,11 +249,11 @@ sudo chown -R postgres:postgres /data/postgresql
 </li>
 </ol>
 <p>Now your <strong>Replication Server</strong> can serve read-only query. If you want to promote it to <strong>Master</strong> can use this command:</p>
-<div class="highlight"><pre><span></span>    # replace 10 with your postgresql version
-    sudo -u postgres pg_ctlcluster 10 main promote
+<div class="highlight"><pre><span></span>    sudo -u postgres pg_ctlcluster 10 main promote
 </pre></div>
 
 
+<p><em>Replace <code>10</code> with your postgresql version</em>.</p>
 <hr>
 <h2>References</h2>
 <ul>
