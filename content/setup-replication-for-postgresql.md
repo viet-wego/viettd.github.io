@@ -7,7 +7,6 @@ Slug: setup-replication-for-postgresql
 Authors: Viet Tran
 Summary: How to setup replication for PostgreSQL using hot stanby.
 
-
 If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the [References](#References). In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.
 
 ## Install PostgreSQL
@@ -33,7 +32,7 @@ You will need 2 instances of PostgreSQL. For detail please see [Install & config
                 host    replication     rep_user             10.240.0.0/16           md5
         If you want to only allow from 1 specific IP, can use CIDR `[your_replication_server_ip]/32`. E.g: 10.240.0.10/32
 
-2. **Configurate WAL (Write Ahead Log)**
+2. **Configure WAL (Write Ahead Log)**
     - Create a directory to store archive file
 
             mkdir -p /data/postgresql/10/main/archive
@@ -70,7 +69,7 @@ You will need 2 instances of PostgreSQL. For detail please see [Install & config
 
     - Rename old data directory
 
-                # replace /data/postgresql/10/main with your postgresql data directory (configurated in postgresql.conf)
+                # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
                 sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 
     - Run backup utility to copy data from Master
@@ -79,7 +78,7 @@ You will need 2 instances of PostgreSQL. For detail please see [Install & config
 
         *Replace **/data/postgresql/10/main** with your data directory & **rep_user** with your replication user above. You will need to provide password for replication user.*
 
-    - Configurate replication
+    - Configure replication
 
         - Turn on Hot Standby
 
@@ -94,7 +93,7 @@ You will need 2 instances of PostgreSQL. For detail please see [Install & config
                 sudo cp /usr/share/postgresql/10/recovery.conf.sample /data/postgresql/10/main/recovery.conf
                 sudo vi /data/postgresql/10/main/recovery.conf
 
-            Configurate stanby
+            Configure stanby
 
                 standby_mode = on
                 primary_conninfo = 'host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]'
