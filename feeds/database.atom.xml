@@ -33,7 +33,7 @@ Your will need to provide a powerful password for this user at the command promp
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Configurate WAL (Write Ahead Log)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Configure WAL (Write Ahead Log)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Create a directory to store archive file&lt;/p&gt;
@@ -98,7 +98,7 @@ archive_command = &amp;#39;test ! -f /data/postgresql/10/main/archive/%f &amp;am
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Rename old data directory&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # replace /data/postgresql/10/main with your postgresql data directory (configurated in postgresql.conf)
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
     sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -113,7 +113,7 @@ archive_command = &amp;#39;test ! -f /data/postgresql/10/main/archive/%f &amp;am
 &lt;p&gt;&lt;em&gt;Replace &lt;strong&gt;/data/postgresql/10/main&lt;/strong&gt; with your data directory &amp;amp; &lt;strong&gt;rep_user&lt;/strong&gt; with your replication user above. You will need to provide password for replication user.&lt;/em&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Configurate replication&lt;/p&gt;
+&lt;p&gt;Configure replication&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Turn on Hot Standby&lt;/p&gt;
@@ -134,7 +134,7 @@ sudo vi /data/postgresql/10/main/recovery.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Configurate stanby&lt;/p&gt;
+&lt;p&gt;Configure stanby&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;standby_mode = on
 primary_conninfo = &amp;#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&amp;#39;
 &lt;/pre&gt;&lt;/div&gt;

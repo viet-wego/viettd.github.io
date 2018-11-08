@@ -44,6 +44,7 @@
                     <div class="navbar-inner">
                         <ul class="nav">
                             <li class="active"><a href="https://viettran.me/category/database.html">database</a></li>
+                            <li ><a href="https://viettran.me/category/devops.html">devops</a></li>
                         </ul>
 
                     </div>
@@ -122,7 +123,7 @@ Your will need to provide a powerful password for this user at the command promp
 </ul>
 </li>
 <li>
-<p><strong>Configurate WAL (Write Ahead Log)</strong></p>
+<p><strong>Configure WAL (Write Ahead Log)</strong></p>
 <ul>
 <li>
 <p>Create a directory to store archive file</p>
@@ -187,7 +188,7 @@ archive_command = &#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;&a
 <ul>
 <li>
 <p>Rename old data directory</p>
-<div class="highlight"><pre><span></span>    # replace /data/postgresql/10/main with your postgresql data directory (configurated in postgresql.conf)
+<div class="highlight"><pre><span></span>    # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
     sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 </pre></div>
 
@@ -202,7 +203,7 @@ archive_command = &#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;&a
 <p><em>Replace <strong>/data/postgresql/10/main</strong> with your data directory &amp; <strong>rep_user</strong> with your replication user above. You will need to provide password for replication user.</em></p>
 </li>
 <li>
-<p>Configurate replication</p>
+<p>Configure replication</p>
 <ul>
 <li>
 <p>Turn on Hot Standby</p>
@@ -223,7 +224,7 @@ sudo vi /data/postgresql/10/main/recovery.conf
 </pre></div>
 
 
-<p>Configurate stanby</p>
+<p>Configure stanby</p>
 <div class="highlight"><pre><span></span>standby_mode = on
 primary_conninfo = &#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&#39;
 </pre></div>

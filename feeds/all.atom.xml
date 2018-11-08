@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-11-07T20:00:00+08:00</updated><entry><title>Setup replication for PostgreSQL</title><link href="https://viettran.me/setup-replication-for-postgresql.html" rel="alternate"></link><published>2018-11-07T20:00:00+08:00</published><updated>2018-11-07T20:00:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-07:/setup-replication-for-postgresql.html</id><summary type="html">&lt;p&gt;How to setup replication for PostgreSQL using hot stanby.&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the &lt;a href="#References"&gt;References&lt;/a&gt;. In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-11-08T18:59:00+08:00</updated><entry><title>Create &amp; Use a Disk on GCE</title><link href="https://viettran.me/create-n-use-a-disk-on-gce.html" rel="alternate"></link><published>2018-11-08T18:40:00+08:00</published><updated>2018-11-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-08:/create-n-use-a-disk-on-gce.html</id><summary type="html">&lt;p&gt;How to create, format and use a disk on Google Compute Engine.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;To be continued...&lt;/h2&gt;</content><category term="devops"></category><category term="gcloud"></category><category term="linux"></category><category term="gcp"></category><category term="gce"></category><category term="vm"></category><category term="disk"></category></entry><entry><title>Setup replication for PostgreSQL</title><link href="https://viettran.me/setup-replication-for-postgresql.html" rel="alternate"></link><published>2018-11-07T20:00:00+08:00</published><updated>2018-11-07T20:00:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-07:/setup-replication-for-postgresql.html</id><summary type="html">&lt;p&gt;How to setup replication for PostgreSQL using hot stanby.&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the &lt;a href="#References"&gt;References&lt;/a&gt;. In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.&lt;/p&gt;
 &lt;h2&gt;Install PostgreSQL&lt;/h2&gt;
 &lt;p&gt;You will need 2 instances of PostgreSQL. For detail please see &lt;a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html"&gt;Install &amp;amp; configure PostgreSQL on Ubuntu&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Prepare Master Server&lt;/h2&gt;
@@ -33,7 +33,7 @@ Your will need to provide a powerful password for this user at the command promp
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Configurate WAL (Write Ahead Log)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Configure WAL (Write Ahead Log)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Create a directory to store archive file&lt;/p&gt;
@@ -98,7 +98,7 @@ archive_command = &amp;#39;test ! -f /data/postgresql/10/main/archive/%f &amp;am
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Rename old data directory&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # replace /data/postgresql/10/main with your postgresql data directory (configurated in postgresql.conf)
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
     sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -113,7 +113,7 @@ archive_command = &amp;#39;test ! -f /data/postgresql/10/main/archive/%f &amp;am
 &lt;p&gt;&lt;em&gt;Replace &lt;strong&gt;/data/postgresql/10/main&lt;/strong&gt; with your data directory &amp;amp; &lt;strong&gt;rep_user&lt;/strong&gt; with your replication user above. You will need to provide password for replication user.&lt;/em&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Configurate replication&lt;/p&gt;
+&lt;p&gt;Configure replication&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Turn on Hot Standby&lt;/p&gt;
@@ -134,7 +134,7 @@ sudo vi /data/postgresql/10/main/recovery.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Configurate stanby&lt;/p&gt;
+&lt;p&gt;Configure stanby&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;standby_mode = on
 primary_conninfo = &amp;#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&amp;#39;
 &lt;/pre&gt;&lt;/div&gt;
