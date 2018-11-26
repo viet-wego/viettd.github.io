@@ -206,131 +206,102 @@ gcloud compute instance delete viet-temp
 &lt;h2&gt;Install PostgreSQL&lt;/h2&gt;
 &lt;p&gt;You will need 2 instances of PostgreSQL. For detail please see &lt;a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html"&gt;Install &amp;amp; configure PostgreSQL on Ubuntu&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Prepare Master Server&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Create a user for replication &amp;amp; allow traffic for replication server&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u postgres createuser -U postgres rep_user -P -c 5 --replication
+&lt;h5&gt;Create a user for replication &amp;amp; allow traffic for replication server&lt;/h5&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u postgres createuser -U postgres rep_user -P -c &lt;span class="m"&gt;5&lt;/span&gt; --replication
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Replace &lt;code&gt;rep_user&lt;/code&gt; with your replication user.
-Replace &lt;code&gt;5&lt;/code&gt; with max connections can be used for replication.
-Your will need to provide a powerful password for this user at the command prompt.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;
+&lt;li&gt;Replace &lt;code&gt;rep_user&lt;/code&gt; with your replication user.&lt;/li&gt;
+&lt;li&gt;Replace &lt;code&gt;5&lt;/code&gt; with max connections can be used for replication.&lt;/li&gt;
+&lt;li&gt;Your will need to provide a powerful password for this user at the command prompt.&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;Edit &lt;strong&gt;pg_hba.conf&lt;/strong&gt; file. By default, you can find it at &lt;code&gt;/etc/postgresql/[your_postgresql_version]/main/pg_hba.conf&lt;/code&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    sudo vi /etc/postgresql/10/main/pg_hba.conf
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi /etc/postgresql/10/main/pg_hba.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;Allow replication connections&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password
-    host    replication     rep_user             10.240.0.0/16           md5
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password&lt;/span&gt;
+host    replication     rep_user             &lt;span class="m"&gt;10&lt;/span&gt;.240.0.0/16           md5
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;If you want to only allow from 1 specific IP, can use CIDR &lt;code&gt;[your_replication_server_ip]/32&lt;/code&gt;. E.g: 10.240.0.10/32&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Configure WAL (Write Ahead Log)&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
+&lt;h5&gt;Configure WAL (Write Ahead Log)&lt;/h5&gt;
 &lt;p&gt;Create a directory to store archive file&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir -p /data/postgresql/10/main/archive
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;Edit &lt;strong&gt;postgresql.conf&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi /etc/postgresql/10/main/postgresql.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;PostgreSQL &amp;gt;= 9.6&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wal_level = replica
+&lt;li&gt;PostgreSQL &amp;gt;= 9.6&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;wal_level&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; replica
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;PostgreSQL &amp;lt;= 9.5&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wal_level = hot_standby
+&lt;ul&gt;
+&lt;li&gt;PostgreSQL &amp;lt;= 9.5&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;wal_level&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; hot_standby
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Enable archive mode&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;archive_mode = on
-archive_command = &amp;#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;amp;&amp;amp;amp; cp %p /data/postgresql/10/main/archive/%f&amp;#39;
+&lt;ul&gt;
+&lt;li&gt;Enable archive mode&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;archive_mode&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; on
+&lt;span class="nv"&gt;archive_command&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;&amp;amp; cp %p /data/postgresql/10/main/archive/%f&amp;#39;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;em&gt;Replace &lt;strong&gt;/data/postgresql/10/main/archive&lt;/strong&gt; with the directory you created above.&lt;/em&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;Restart service to make the changes effective&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo service postgresql restart
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
 &lt;h2&gt;Prepare Replication Server&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Stop service&lt;/strong&gt;&lt;/p&gt;
+&lt;h5&gt;Stop service&lt;/h5&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo service postgresql stop
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Initialize data&lt;/strong&gt;&lt;/p&gt;
+&lt;h5&gt;Initialize data&lt;/h5&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Rename old data directory&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
-    sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
+sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Run backup utility to copy data from Master&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;em&gt;Replace &lt;strong&gt;/data/postgresql/10/main&lt;/strong&gt; with your data directory &amp;amp; &lt;strong&gt;rep_user&lt;/strong&gt; with your replication user above. You will need to provide password for replication user.&lt;/em&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Configure replication&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Turn on Hot Standby&lt;/p&gt;
+&lt;/ul&gt;
+&lt;h5&gt;Turn on Hot Standby&lt;/h5&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi  /etc/postgresql/10/main/postgresql.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Uncomment this line&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;hot_standby = on
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;hot_standby&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; on
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;Create recovery file&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo cp /usr/share/postgresql/10/recovery.conf.sample /data/postgresql/10/main/recovery.conf
 sudo vi /data/postgresql/10/main/recovery.conf
@@ -338,32 +309,24 @@ sudo vi /data/postgresql/10/main/recovery.conf
 
 
 &lt;p&gt;Configure stanby&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;standby_mode = on
-primary_conninfo = &amp;#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&amp;#39;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;standby_mode&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; on
+&lt;span class="nv"&gt;primary_conninfo&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&amp;#39;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Make sure user &lt;strong&gt;postgres&lt;/strong&gt; has correct permission on postgresql data directory&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo chmod -R 0700 /data/postgresql
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo chmod -R &lt;span class="m"&gt;0700&lt;/span&gt; /data/postgresql
 sudo chown -R postgres:postgres /data/postgresql
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Start service&lt;/strong&gt;&lt;/p&gt;
+&lt;h5&gt;Start service&lt;/h5&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo service postgresql start
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ol&gt;
 &lt;p&gt;Now your &lt;strong&gt;Replication Server&lt;/strong&gt; can serve read-only query. If you want to promote it to &lt;strong&gt;Master&lt;/strong&gt; can use this command:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    sudo -u postgres pg_ctlcluster 10 main promote
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u postgres pg_ctlcluster &lt;span class="m"&gt;10&lt;/span&gt; main promote
 &lt;/pre&gt;&lt;/div&gt;
 
 

@@ -93,131 +93,102 @@
 <h2>Install PostgreSQL</h2>
 <p>You will need 2 instances of PostgreSQL. For detail please see <a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html">Install &amp; configure PostgreSQL on Ubuntu</a>.</p>
 <h2>Prepare Master Server</h2>
-<ol>
-<li>
-<p><strong>Create a user for replication &amp; allow traffic for replication server</strong></p>
-<div class="highlight"><pre><span></span>sudo -u postgres createuser -U postgres rep_user -P -c 5 --replication
+<h5>Create a user for replication &amp; allow traffic for replication server</h5>
+<div class="highlight"><pre><span></span>sudo -u postgres createuser -U postgres rep_user -P -c <span class="m">5</span> --replication
 </pre></div>
 
 
-<p>Replace <code>rep_user</code> with your replication user.
-Replace <code>5</code> with max connections can be used for replication.
-Your will need to provide a powerful password for this user at the command prompt.</p>
 <ul>
-<li>
+<li>Replace <code>rep_user</code> with your replication user.</li>
+<li>Replace <code>5</code> with max connections can be used for replication.</li>
+<li>Your will need to provide a powerful password for this user at the command prompt.</li>
+</ul>
 <p>Edit <strong>pg_hba.conf</strong> file. By default, you can find it at <code>/etc/postgresql/[your_postgresql_version]/main/pg_hba.conf</code>.</p>
-<div class="highlight"><pre><span></span>    sudo vi /etc/postgresql/10/main/pg_hba.conf
+<div class="highlight"><pre><span></span>sudo vi /etc/postgresql/10/main/pg_hba.conf
 </pre></div>
 
 
-</li>
-<li>
 <p>Allow replication connections</p>
-<div class="highlight"><pre><span></span>    # Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password
-    host    replication     rep_user             10.240.0.0/16           md5
+<div class="highlight"><pre><span></span><span class="c1"># Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password</span>
+host    replication     rep_user             <span class="m">10</span>.240.0.0/16           md5
 </pre></div>
 
 
 <p>If you want to only allow from 1 specific IP, can use CIDR <code>[your_replication_server_ip]/32</code>. E.g: 10.240.0.10/32</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Configure WAL (Write Ahead Log)</strong></p>
-<ul>
-<li>
+<h5>Configure WAL (Write Ahead Log)</h5>
 <p>Create a directory to store archive file</p>
 <div class="highlight"><pre><span></span>mkdir -p /data/postgresql/10/main/archive
 </pre></div>
 
 
-</li>
-<li>
 <p>Edit <strong>postgresql.conf</strong></p>
 <div class="highlight"><pre><span></span>sudo vi /etc/postgresql/10/main/postgresql.conf
 </pre></div>
 
 
 <ul>
-<li>
-<p>PostgreSQL &gt;= 9.6</p>
-<div class="highlight"><pre><span></span>wal_level = replica
+<li>PostgreSQL &gt;= 9.6</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="nv">wal_level</span> <span class="o">=</span> replica
 </pre></div>
 
 
-</li>
-<li>
-<p>PostgreSQL &lt;= 9.5</p>
-<div class="highlight"><pre><span></span>wal_level = hot_standby
+<ul>
+<li>PostgreSQL &lt;= 9.5</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="nv">wal_level</span> <span class="o">=</span> hot_standby
 </pre></div>
 
 
-</li>
-<li>
-<p>Enable archive mode</p>
-<div class="highlight"><pre><span></span>archive_mode = on
-archive_command = &#39;test ! -f /data/postgresql/10/main/archive/%f &amp;amp;&amp;amp; cp %p /data/postgresql/10/main/archive/%f&#39;
+<ul>
+<li>Enable archive mode</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="nv">archive_mode</span> <span class="o">=</span> on
+<span class="nv">archive_command</span> <span class="o">=</span> <span class="s1">&#39;test ! -f /data/postgresql/10/main/archive/%f &amp;&amp; cp %p /data/postgresql/10/main/archive/%f&#39;</span>
 </pre></div>
 
 
 <p><em>Replace <strong>/data/postgresql/10/main/archive</strong> with the directory you created above.</em></p>
-</li>
-</ul>
-</li>
-<li>
 <p>Restart service to make the changes effective</p>
 <div class="highlight"><pre><span></span>sudo service postgresql restart
 </pre></div>
 
 
-</li>
-</ul>
-</li>
-</ol>
 <h2>Prepare Replication Server</h2>
-<ol>
-<li>
-<p><strong>Stop service</strong></p>
+<h5>Stop service</h5>
 <div class="highlight"><pre><span></span>sudo service postgresql stop
 </pre></div>
 
 
-</li>
-<li>
-<p><strong>Initialize data</strong></p>
+<h5>Initialize data</h5>
 <ul>
 <li>
 <p>Rename old data directory</p>
-<div class="highlight"><pre><span></span>    # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
-    sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
+<div class="highlight"><pre><span></span># replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
+sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 </pre></div>
 
 
 </li>
 <li>
 <p>Run backup utility to copy data from Master</p>
-<div class="highlight"><pre><span></span>    sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
+<div class="highlight"><pre><span></span>sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
 </pre></div>
 
 
 <p><em>Replace <strong>/data/postgresql/10/main</strong> with your data directory &amp; <strong>rep_user</strong> with your replication user above. You will need to provide password for replication user.</em></p>
 </li>
-<li>
-<p>Configure replication</p>
-<ul>
-<li>
-<p>Turn on Hot Standby</p>
+</ul>
+<h5>Turn on Hot Standby</h5>
 <div class="highlight"><pre><span></span>sudo vi  /etc/postgresql/10/main/postgresql.conf
 </pre></div>
 
 
 <p>Uncomment this line</p>
-<div class="highlight"><pre><span></span>hot_standby = on
+<div class="highlight"><pre><span></span><span class="nv">hot_standby</span> <span class="o">=</span> on
 </pre></div>
 
 
-</li>
-<li>
 <p>Create recovery file</p>
 <div class="highlight"><pre><span></span>sudo cp /usr/share/postgresql/10/recovery.conf.sample /data/postgresql/10/main/recovery.conf
 sudo vi /data/postgresql/10/main/recovery.conf
@@ -225,32 +196,24 @@ sudo vi /data/postgresql/10/main/recovery.conf
 
 
 <p>Configure stanby</p>
-<div class="highlight"><pre><span></span>standby_mode = on
-primary_conninfo = &#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&#39;
+<div class="highlight"><pre><span></span><span class="nv">standby_mode</span> <span class="o">=</span> on
+<span class="nv">primary_conninfo</span> <span class="o">=</span> <span class="s1">&#39;host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]&#39;</span>
 </pre></div>
 
 
 <p>Make sure user <strong>postgres</strong> has correct permission on postgresql data directory</p>
-<div class="highlight"><pre><span></span>sudo chmod -R 0700 /data/postgresql
+<div class="highlight"><pre><span></span>sudo chmod -R <span class="m">0700</span> /data/postgresql
 sudo chown -R postgres:postgres /data/postgresql
 </pre></div>
 
 
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Start service</strong></p>
+<h5>Start service</h5>
 <div class="highlight"><pre><span></span>sudo service postgresql start
 </pre></div>
 
 
-</li>
-</ol>
 <p>Now your <strong>Replication Server</strong> can serve read-only query. If you want to promote it to <strong>Master</strong> can use this command:</p>
-<div class="highlight"><pre><span></span>    sudo -u postgres pg_ctlcluster 10 main promote
+<div class="highlight"><pre><span></span>sudo -u postgres pg_ctlcluster <span class="m">10</span> main promote
 </pre></div>
 
 
