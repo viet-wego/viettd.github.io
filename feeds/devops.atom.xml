@@ -122,7 +122,7 @@
     &lt;span class="nt"&gt;3170&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;06&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="nt"&gt;per&lt;/span&gt; &lt;span class="nt"&gt;slot&lt;/span&gt; &lt;span class="nt"&gt;on&lt;/span&gt; &lt;span class="nt"&gt;average&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</content><category term="devops"></category><category term="redis"></category><category term="cluster"></category><category term="scale"></category><category term="tutorial"></category></entry><entry><title>Create &amp; Format a Disk on GCE</title><link href="https://viettran.me/create-n-format-a-disk-on-gce.html" rel="alternate"></link><published>2018-11-08T18:40:00+08:00</published><updated>2018-11-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-08:/create-n-format-a-disk-on-gce.html</id><summary type="html">&lt;p&gt;How to create, format and use a disk on Google Compute Engine.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is the short version to help you do the task. If you want to learn more please check the References at the end of this article.&lt;/p&gt;
 &lt;h2&gt;Create a new disk&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute disks create dev-postgres-master --size=500GB --type=pd-ssd
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute disks create dev-postgres-master --size&lt;span class="o"&gt;=&lt;/span&gt;500GB --type&lt;span class="o"&gt;=&lt;/span&gt;pd-ssd
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -132,7 +132,7 @@
 &lt;/ul&gt;
 &lt;h2&gt;Create a temporary instance &amp;amp; attach the disk&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute instances create viet-temp
-gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
+gcloud compute instances attach-disk viet-temp --disk&lt;span class="o"&gt;=&lt;/span&gt;dev-postgres-master
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -141,57 +141,47 @@ gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
 &lt;li&gt;&lt;code&gt;dev-postgres-master&lt;/code&gt; is name of the disk created above&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Format the new disk&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
 &lt;p&gt;SSH to the instance has the new disk&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute ssh viet-temp
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;When you're inside the instance:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;List all devices are attached to server&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo lsblk
+&lt;li&gt;List all devices are attached to server&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo lsblk
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;p&gt;You will get the output like this&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-    sdb      8:16   0  500G  0 disk
-    sda      8:0    0   64G  0 disk
-    └─sda1   8:1    0   64G  0 part /
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdb      &lt;span class="m"&gt;8&lt;/span&gt;:16   &lt;span class="m"&gt;0&lt;/span&gt;  500G  &lt;span class="m"&gt;0&lt;/span&gt; disk
+sda      &lt;span class="m"&gt;8&lt;/span&gt;:0    &lt;span class="m"&gt;0&lt;/span&gt;   64G  &lt;span class="m"&gt;0&lt;/span&gt; disk
+└─sda1   &lt;span class="m"&gt;8&lt;/span&gt;:1    &lt;span class="m"&gt;0&lt;/span&gt;   64G  &lt;span class="m"&gt;0&lt;/span&gt; part /
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;In this case, my new disk is &lt;code&gt;/dev/sbd&lt;/code&gt;, I will format it with these commands&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
+&lt;li&gt;In this case, my new disk is &lt;code&gt;/dev/sbd&lt;/code&gt;, I will format it with these commands&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mkfs.ext4 -m &lt;span class="m"&gt;0&lt;/span&gt; -F -E &lt;span class="nv"&gt;lazy_itable_init&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,lazy_journal_init&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,discard /dev/sdb
 sudo mkdir -p /data
 sudo mount /dev/sdb /data
-sudo chmod -R 777 /data
+sudo chmod -R &lt;span class="m"&gt;777&lt;/span&gt; /data
 sudo umount /data
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Exit&lt;/p&gt;
-&lt;/li&gt;
+&lt;p&gt;Then exit the server.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Detach the disk &amp;amp; delete the temporary instance&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Detach the disk &amp;amp; delete the temporary instance&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute instances detach-disk viet-temp --disk=dev-postgres-master
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute instances detach-disk viet-temp --disk&lt;span class="o"&gt;=&lt;/span&gt;dev-postgres-master
 gcloud compute instance delete viet-temp
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;p&gt;Now, your new disk is ready to use as a &lt;code&gt;ext4&lt;/code&gt; volumne.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;References&lt;/h2&gt;

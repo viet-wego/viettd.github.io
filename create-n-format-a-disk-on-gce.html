@@ -90,7 +90,7 @@
 
         <p>This is the short version to help you do the task. If you want to learn more please check the References at the end of this article.</p>
 <h2>Create a new disk</h2>
-<div class="highlight"><pre><span></span>gcloud compute disks create dev-postgres-master --size=500GB --type=pd-ssd
+<div class="highlight"><pre><span></span>gcloud compute disks create dev-postgres-master --size<span class="o">=</span>500GB --type<span class="o">=</span>pd-ssd
 </pre></div>
 
 
@@ -100,7 +100,7 @@
 </ul>
 <h2>Create a temporary instance &amp; attach the disk</h2>
 <div class="highlight"><pre><span></span>gcloud compute instances create viet-temp
-gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
+gcloud compute instances attach-disk viet-temp --disk<span class="o">=</span>dev-postgres-master
 </pre></div>
 
 
@@ -109,57 +109,47 @@ gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
 <li><code>dev-postgres-master</code> is name of the disk created above</li>
 </ul>
 <h2>Format the new disk</h2>
-<ul>
-<li>
 <p>SSH to the instance has the new disk</p>
 <div class="highlight"><pre><span></span>gcloud compute ssh viet-temp
 </pre></div>
 
 
-</li>
-<li>
 <p>When you're inside the instance:</p>
 <ul>
-<li>List all devices are attached to server<div class="highlight"><pre><span></span>sudo lsblk
+<li>List all devices are attached to server</li>
+</ul>
+<div class="highlight"><pre><span></span>sudo lsblk
 </pre></div>
 
 
-</li>
-</ul>
 <p>You will get the output like this</p>
-<div class="highlight"><pre><span></span>    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-    sdb      8:16   0  500G  0 disk
-    sda      8:0    0   64G  0 disk
-    └─sda1   8:1    0   64G  0 part /
+<div class="highlight"><pre><span></span>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdb      <span class="m">8</span>:16   <span class="m">0</span>  500G  <span class="m">0</span> disk
+sda      <span class="m">8</span>:0    <span class="m">0</span>   64G  <span class="m">0</span> disk
+└─sda1   <span class="m">8</span>:1    <span class="m">0</span>   64G  <span class="m">0</span> part /
 </pre></div>
 
 
 <ul>
-<li>
-<p>In this case, my new disk is <code>/dev/sbd</code>, I will format it with these commands</p>
-<div class="highlight"><pre><span></span>sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
+<li>In this case, my new disk is <code>/dev/sbd</code>, I will format it with these commands</li>
+</ul>
+<div class="highlight"><pre><span></span>sudo mkfs.ext4 -m <span class="m">0</span> -F -E <span class="nv">lazy_itable_init</span><span class="o">=</span><span class="m">0</span>,lazy_journal_init<span class="o">=</span><span class="m">0</span>,discard /dev/sdb
 sudo mkdir -p /data
 sudo mount /dev/sdb /data
-sudo chmod -R 777 /data
+sudo chmod -R <span class="m">777</span> /data
 sudo umount /data
 </pre></div>
 
 
-</li>
-<li>
-<p>Exit</p>
-</li>
+<p>Then exit the server.</p>
+<ul>
+<li>Detach the disk &amp; delete the temporary instance</li>
 </ul>
-</li>
-<li>
-<p>Detach the disk &amp; delete the temporary instance</p>
-<div class="highlight"><pre><span></span>gcloud compute instances detach-disk viet-temp --disk=dev-postgres-master
+<div class="highlight"><pre><span></span>gcloud compute instances detach-disk viet-temp --disk<span class="o">=</span>dev-postgres-master
 gcloud compute instance delete viet-temp
 </pre></div>
 
 
-</li>
-</ul>
 <p>Now, your new disk is ready to use as a <code>ext4</code> volumne.</p>
 <hr>
 <h2>References</h2>
