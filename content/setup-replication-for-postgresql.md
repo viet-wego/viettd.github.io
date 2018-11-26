@@ -15,101 +15,137 @@ You will need 2 instances of PostgreSQL. For detail please see [Install & config
 
 ## Prepare Master Server
 
-1. **Create a user for replication & allow traffic for replication server**
+##### Create a user for replication & allow traffic for replication server
 
-        sudo -u postgres createuser -U postgres rep_user -P -c 5 --replication
-    Replace `rep_user` with your replication user.
-    Replace `5` with max connections can be used for replication.
-    Your will need to provide a powerful password for this user at the command prompt.
+```bash
+sudo -u postgres createuser -U postgres rep_user -P -c 5 --replication
+```
 
-    - Edit **pg_hba.conf** file. By default, you can find it at `/etc/postgresql/[your_postgresql_version]/main/pg_hba.conf`.
+- Replace `rep_user` with your replication user.
+- Replace `5` with max connections can be used for replication.
+- Your will need to provide a powerful password for this user at the command prompt.
 
-                sudo vi /etc/postgresql/10/main/pg_hba.conf
+Edit **pg_hba.conf** file. By default, you can find it at `/etc/postgresql/[your_postgresql_version]/main/pg_hba.conf`.
 
-    - Allow replication connections
+```bash
+sudo vi /etc/postgresql/10/main/pg_hba.conf
+```
 
-                # Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password
-                host    replication     rep_user             10.240.0.0/16           md5
-        If you want to only allow from 1 specific IP, can use CIDR `[your_replication_server_ip]/32`. E.g: 10.240.0.10/32
+Allow replication connections
 
-2. **Configure WAL (Write Ahead Log)**
-    - Create a directory to store archive file
+```bash
+# Allow replication connections for user rep_user from 10.240.0.0/16 with md5 password
+host    replication     rep_user             10.240.0.0/16           md5
+```
 
-            mkdir -p /data/postgresql/10/main/archive
+If you want to only allow from 1 specific IP, can use CIDR `[your_replication_server_ip]/32`. E.g: 10.240.0.10/32
 
-    - Edit **postgresql.conf**
+##### Configure WAL (Write Ahead Log)
 
-            sudo vi /etc/postgresql/10/main/postgresql.conf
-        - PostgreSQL >= 9.6
+Create a directory to store archive file
 
-                wal_level = replica
+```bash
+mkdir -p /data/postgresql/10/main/archive
+```
 
-        - PostgreSQL <= 9.5
+Edit **postgresql.conf**
 
-                wal_level = hot_standby
+```bash
+sudo vi /etc/postgresql/10/main/postgresql.conf
+```
 
-        - Enable archive mode
+- PostgreSQL >= 9.6
 
-                archive_mode = on
-                archive_command = 'test ! -f /data/postgresql/10/main/archive/%f && cp %p /data/postgresql/10/main/archive/%f'
+```bash
+wal_level = replica
+```
 
-            *Replace **/data/postgresql/10/main/archive** with the directory you created above.*
+- PostgreSQL <= 9.5
 
-    - Restart service to make the changes effective
+```bash
+wal_level = hot_standby
+```
 
-            sudo service postgresql restart
+- Enable archive mode
+
+```bash
+archive_mode = on
+archive_command = 'test ! -f /data/postgresql/10/main/archive/%f && cp %p /data/postgresql/10/main/archive/%f'
+```
+
+*Replace **/data/postgresql/10/main/archive** with the directory you created above.*
+
+Restart service to make the changes effective
+
+```bash
+sudo service postgresql restart
+```
 
 ## Prepare Replication Server
 
-1. **Stop service**
+##### Stop service
 
-        sudo service postgresql stop
+```bash
+sudo service postgresql stop
+```
 
-2. **Initialize data**
+##### Initialize data
 
-    - Rename old data directory
+- Rename old data directory
 
-                # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
-                sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
+        # replace /data/postgresql/10/main with your postgresql data directory (configured in postgresql.conf)
+        sudo mv /data/postgresql/10/main /data/postgresql/10/main_old
 
-    - Run backup utility to copy data from Master
+- Run backup utility to copy data from Master
 
-                sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
+        sudo -u postgres pg_basebackup -h  -D /data/postgresql/10/main -U rep_user -v -P -X stream
 
-        *Replace **/data/postgresql/10/main** with your data directory & **rep_user** with your replication user above. You will need to provide password for replication user.*
+    *Replace **/data/postgresql/10/main** with your data directory & **rep_user** with your replication user above. You will need to provide password for replication user.*
 
-    - Configure replication
+##### Turn on Hot Standby
 
-        - Turn on Hot Standby
+```bash
+sudo vi  /etc/postgresql/10/main/postgresql.conf
+```
 
-                sudo vi  /etc/postgresql/10/main/postgresql.conf
+Uncomment this line
 
-            Uncomment this line
+```bash
+hot_standby = on
+```
 
-                hot_standby = on
+Create recovery file
 
-        - Create recovery file
+```bash
+sudo cp /usr/share/postgresql/10/recovery.conf.sample /data/postgresql/10/main/recovery.conf
+sudo vi /data/postgresql/10/main/recovery.conf
+```
 
-                sudo cp /usr/share/postgresql/10/recovery.conf.sample /data/postgresql/10/main/recovery.conf
-                sudo vi /data/postgresql/10/main/recovery.conf
+Configure stanby
 
-            Configure stanby
+```bash
+standby_mode = on
+primary_conninfo = 'host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]'
+```
 
-                standby_mode = on
-                primary_conninfo = 'host=[your_master_host] port=[your_master_port] user=[your_replication_user] password=[your_replication_user_password]'
+Make sure user **postgres** has correct permission on postgresql data directory
 
-            Make sure user **postgres** has correct permission on postgresql data directory
+```bash
+sudo chmod -R 0700 /data/postgresql
+sudo chown -R postgres:postgres /data/postgresql
+```
 
-                sudo chmod -R 0700 /data/postgresql
-                sudo chown -R postgres:postgres /data/postgresql
+##### Start service
 
-3. **Start service**
-
-        sudo service postgresql start
+```bash
+sudo service postgresql start
+```
 
 Now your **Replication Server** can serve read-only query. If you want to promote it to **Master** can use this command:
 
-        sudo -u postgres pg_ctlcluster 10 main promote
+```bash
+sudo -u postgres pg_ctlcluster 10 main promote
+```
 
 *Replace `10` with your postgresql version*.
 

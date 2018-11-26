@@ -11,52 +11,66 @@ This is the short version to help you do the task. If you want to learn more ple
 
 ## Create a new disk
 
-    gcloud compute disks create dev-postgres-master --size=500GB --type=pd-ssd
+```bash
+gcloud compute disks create dev-postgres-master --size=500GB --type=pd-ssd
+```
 
 - `dev-postgres-master` is my disk name
 - `type` can be `pd-ssd` or `pd-standard`
 
 ## Create a temporary instance & attach the disk
 
-    gcloud compute instances create viet-temp
-    gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
+```bash
+gcloud compute instances create viet-temp
+gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
+```
 
 - `viet-temp` is my instance name
 - `dev-postgres-master` is name of the disk created above
 
 ## Format the new disk
 
-- SSH to the instance has the new disk
+SSH to the instance has the new disk
 
-        gcloud compute ssh viet-temp
+```bash
+gcloud compute ssh viet-temp
+```
 
-- When you're inside the instance:
+When you're inside the instance:
 
-    - List all devices are attached to server
+- List all devices are attached to server
 
-            sudo lsblk
+```bash
+sudo lsblk
+```
 
-      You will get the output like this
+You will get the output like this
 
-            NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-            sdb      8:16   0  500G  0 disk
-            sda      8:0    0   64G  0 disk
-            └─sda1   8:1    0   64G  0 part /
+```bash
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdb      8:16   0  500G  0 disk
+sda      8:0    0   64G  0 disk
+└─sda1   8:1    0   64G  0 part /
+```
 
-    - In this case, my new disk is `/dev/sbd`, I will format it with these commands
+- In this case, my new disk is `/dev/sbd`, I will format it with these commands
 
-            sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
-            sudo mkdir -p /data
-            sudo mount /dev/sdb /data
-            sudo chmod -R 777 /data
-            sudo umount /data
-  
-    - Exit
+```bash
+sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
+sudo mkdir -p /data
+sudo mount /dev/sdb /data
+sudo chmod -R 777 /data
+sudo umount /data
+```
+
+Then exit the server.
 
 - Detach the disk & delete the temporary instance
 
-        gcloud compute instances detach-disk viet-temp --disk=dev-postgres-master
-        gcloud compute instance delete viet-temp
+```bash
+gcloud compute instances detach-disk viet-temp --disk=dev-postgres-master
+gcloud compute instance delete viet-temp
+```
 
 Now, your new disk is ready to use as a `ext4` volumne.
 
