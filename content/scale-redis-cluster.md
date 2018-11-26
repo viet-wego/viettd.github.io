@@ -17,25 +17,27 @@ Let's check the status of my cluster with this command below.
 
 The output I receive:
 
-        10.240.0.1:6379 (4f002e35...) -> 4320889 keys | 1366 slots | 0 slaves.
-        10.240.0.2:6379 (a2d2d8f4...) -> 4304402 keys | 1366 slots | 0 slaves.
-        10.240.0.3:6379 (b021ccf0...) -> 4163969 keys | 1366 slots | 0 slaves.
-        10.240.0.4:6379 (0dd0889b...) -> 4183495 keys | 1366 slots | 0 slaves.
-        10.240.0.5:6379 (d94a5bed...) -> 4269335 keys | 1366 slots | 0 slaves.
-        10.240.0.6:6379 (3229648e...) -> 4206758 keys | 1359 slots | 0 slaves.
-        10.240.0.7:6379 (2bb07de3...) -> 4484283 keys | 1365 slots | 0 slaves.
-        10.240.0.8:6379 (44138262...) -> 4118749 keys | 1366 slots | 0 slaves.
-        10.240.0.9:6379 (fa6af69a...) -> 4237922 keys | 1366 slots | 0 slaves.
-        10.240.0.10:6379 (a5f5e5c5...) -> 4165017 keys | 1366 slots | 0 slaves.
-        10.240.0.11:6379 (f4d9872d...) -> 4326251 keys | 1366 slots | 0 slaves.
-        10.240.0.12:6379 (102ca6bc...) -> 4140947 keys | 1366 slots | 0 slaves.
-        [OK] 50922208 keys in 12 masters.
-        3108.04 keys per slot on average.
+```bash
+10.240.0.1:6379 (4f002e35...) -> 4320889 keys | 1366 slots | 0 slaves.
+10.240.0.2:6379 (a2d2d8f4...) -> 4304402 keys | 1366 slots | 0 slaves.
+10.240.0.3:6379 (b021ccf0...) -> 4163969 keys | 1366 slots | 0 slaves.
+10.240.0.4:6379 (0dd0889b...) -> 4183495 keys | 1366 slots | 0 slaves.
+10.240.0.5:6379 (d94a5bed...) -> 4269335 keys | 1366 slots | 0 slaves.
+10.240.0.6:6379 (3229648e...) -> 4206758 keys | 1359 slots | 0 slaves.
+10.240.0.7:6379 (2bb07de3...) -> 4484283 keys | 1365 slots | 0 slaves.
+10.240.0.8:6379 (44138262...) -> 4118749 keys | 1366 slots | 0 slaves.
+10.240.0.9:6379 (fa6af69a...) -> 4237922 keys | 1366 slots | 0 slaves.
+10.240.0.10:6379 (a5f5e5c5...) -> 4165017 keys | 1366 slots | 0 slaves.
+10.240.0.11:6379 (f4d9872d...) -> 4326251 keys | 1366 slots | 0 slaves.
+10.240.0.12:6379 (102ca6bc...) -> 4140947 keys | 1366 slots | 0 slaves.
+[OK] 50922208 keys in 12 masters.
+3108.04 keys per slot on average.
+```
 
 
-
-        redis-trib.rb add-node 10.240.0.13:6379 10.240.0.1:6379
-
+~~~~shell
+redis-trib.rb add-node 10.240.0.13:6379 10.240.0.1:6379
+~~~~
 .
 
         >>> Adding node 10.240.0.13:6379 to cluster 10.240.0.1:6379
