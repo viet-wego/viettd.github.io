@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Viet Tran" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Create & Format a Disk on GCE"/>
+    <meta property="og:url" content="https://viettran.me/create-n-format-a-disk-on-gce.html"/>
+    <meta property="og:site_name" content="Viet Tran"/>
+    <meta property="og:type" content="article"/>
+
+    <link rel="canonical" href="https://viettran.me/create-n-format-a-disk-on-gce.html" />
+
+    <title>Create & Format a Disk on GCE | Viet Tran</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="https://viettran.me/theme/css/main.css" />
+    <link href="https://viettran.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Viet Tran Atom Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="https://viettran.me/">Viet Tran </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="https://viettran.me/category/database.html">database</a></li>
+                            <li class="active"><a href="https://viettran.me/category/devops.html">devops</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="https://viettran.me/create-n-format-a-disk-on-gce.html" rel="bookmark"
+             title="Permalink to Create & Format a Disk on GCE">Create & Format a Disk on GCE</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="https://viettran.me/author/viet-tran.html">Viet Tran</a>
+    </address>
+
+    in <a href="https://viettran.me/category/devops.html">devops</a>
+
+    on 2018-11-08
+
+        |
+        tags:         <a href="https://viettran.me/tag/devops.html">devops</a>
+        <a href="https://viettran.me/tag/gcloud.html">gcloud</a>
+        <a href="https://viettran.me/tag/linux.html">linux</a>
+        <a href="https://viettran.me/tag/gcp.html">gcp</a>
+        <a href="https://viettran.me/tag/gce.html">gce</a>
+        <a href="https://viettran.me/tag/vm.html">vm</a>
+        <a href="https://viettran.me/tag/disk.html">disk</a>
+
+
+
+    
+</footer><!-- /.post-info -->
+
+        <p>This is the short version to help you do the task. If you want to learn more please check the References at the end of this article.</p>
+<h2>Create a new disk</h2>
+<div class="highlight"><pre><span></span>gcloud compute disks create dev-postgres-master --size=500GB --type=pd-ssd
+</pre></div>
+
+
+<ul>
+<li><code>dev-postgres-master</code> is my disk name</li>
+<li><code>type</code> can be <code>pd-ssd</code> or <code>pd-standard</code></li>
+</ul>
+<h2>Create a temporary instance &amp; attach the disk</h2>
+<div class="highlight"><pre><span></span>gcloud compute instances create viet-temp
+gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
+</pre></div>
+
+
+<ul>
+<li><code>viet-temp</code> is my instance name</li>
+<li><code>dev-postgres-master</code> is name of the disk created above</li>
+</ul>
+<h2>Format the new disk</h2>
+<ul>
+<li>
+<p>SSH to the instance has the new disk</p>
+<div class="highlight"><pre><span></span>gcloud compute ssh viet-temp
+</pre></div>
+
+
+</li>
+<li>
+<p>When you're inside the instance:</p>
+<ul>
+<li>List all devices are attached to server<div class="highlight"><pre><span></span>sudo lsblk
+</pre></div>
+
+
+</li>
+</ul>
+<p>You will get the output like this</p>
+<div class="highlight"><pre><span></span>    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    sdb      8:16   0  500G  0 disk
+    sda      8:0    0   64G  0 disk
+    └─sda1   8:1    0   64G  0 part /
+</pre></div>
+
+
+<ul>
+<li>
+<p>In this case, my new disk is <code>/dev/sbd</code>, I will format it with these commands</p>
+<div class="highlight"><pre><span></span>sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
+sudo mkdir -p /data
+sudo mount /dev/sdb /data
+sudo chmod -R 777 /data
+sudo umount /data
+</pre></div>
+
+
+</li>
+<li>
+<p>Exit</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Detach the disk &amp; delete the temporary instance</p>
+<div class="highlight"><pre><span></span>gcloud compute instances detach-disk viet-temp --disk=dev-postgres-master
+gcloud compute instance delete viet-temp
+</pre></div>
+
+
+</li>
+</ul>
+<p>Now, your new disk is ready to use as a <code>ext4</code> volumne.</p>
+<hr>
+<h2>References</h2>
+<ul>
+<li>
+<p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Adding or Resizing Persistent Disks</a></p>
+</li>
+<li>
+<p><a href="https://cloud.google.com/sdk/gcloud/reference/compute/disks/create">gcloud compute disks create</a></p>
+</li>
+</ul>
+
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        This blog is proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                    </p>
+                    <p>
+                        <a href="http://github.com/jsliang/pelican-fresh/">Fresh</a> is a responsive theme designed by <a href="http://jsliang.com/">jsliang</a> and <a href="https://github.com/jsliang/pelican-fresh/graphs/contributors">contributors</a>.
+                        Special thanks to <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a> and <a href="http://getbootstrap.com/">Twitter Bootstrap</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

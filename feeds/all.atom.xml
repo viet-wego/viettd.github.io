@@ -1,5 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-11-08T18:59:00+08:00</updated><entry><title>Create &amp; Use a Disk on GCE</title><link href="https://viettran.me/create-n-use-a-disk-on-gce.html" rel="alternate"></link><published>2018-11-08T18:40:00+08:00</published><updated>2018-11-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-08:/create-n-use-a-disk-on-gce.html</id><summary type="html">&lt;p&gt;How to create, format and use a disk on Google Compute Engine.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;To be continued...&lt;/h2&gt;</content><category term="devops"></category><category term="gcloud"></category><category term="linux"></category><category term="gcp"></category><category term="gce"></category><category term="vm"></category><category term="disk"></category></entry><entry><title>Setup replication for PostgreSQL</title><link href="https://viettran.me/setup-replication-for-postgresql.html" rel="alternate"></link><published>2018-11-07T20:00:00+08:00</published><updated>2018-11-07T20:00:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-07:/setup-replication-for-postgresql.html</id><summary type="html">&lt;p&gt;How to setup replication for PostgreSQL using hot stanby.&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the &lt;a href="#References"&gt;References&lt;/a&gt;. In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-11-25T18:59:00+08:00</updated><entry><title>Scale out a Redis cluster</title><link href="https://viettran.me/scale-redis-cluster.html" rel="alternate"></link><published>2018-11-15T18:40:00+08:00</published><updated>2018-11-25T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-15:/scale-redis-cluster.html</id><summary type="html">&lt;p&gt;How to scale out (add more nodes into) a Redis cluster.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;To be continued...&lt;/h2&gt;
+&lt;p&gt;Let's check the status of my cluster with this command below.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    redis-trib.rb info 10.240.0.1:6379
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Please replace &lt;strong&gt;6379&lt;/strong&gt; with your Redis port &amp;amp; &lt;strong&gt;10.240.0.1&lt;/strong&gt; with your Redis host.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The output I receive:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;.240.0.1:6379 &lt;span class="o"&gt;(&lt;/span&gt;4f002e35...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4320889&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.2:6379 &lt;span class="o"&gt;(&lt;/span&gt;a2d2d8f4...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4304402&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.3:6379 &lt;span class="o"&gt;(&lt;/span&gt;b021ccf0...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4163969&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.4:6379 &lt;span class="o"&gt;(&lt;/span&gt;0dd0889b...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4183495&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.5:6379 &lt;span class="o"&gt;(&lt;/span&gt;d94a5bed...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4269335&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.6:6379 &lt;span class="o"&gt;(&lt;/span&gt;3229648e...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4206758&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1359&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.7:6379 &lt;span class="o"&gt;(&lt;/span&gt;2bb07de3...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4484283&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1365&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.8:6379 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;44138262&lt;/span&gt;...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4118749&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.9:6379 &lt;span class="o"&gt;(&lt;/span&gt;fa6af69a...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4237922&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.10:6379 &lt;span class="o"&gt;(&lt;/span&gt;a5f5e5c5...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4165017&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.11:6379 &lt;span class="o"&gt;(&lt;/span&gt;f4d9872d...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4326251&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="m"&gt;10&lt;/span&gt;.240.0.12:6379 &lt;span class="o"&gt;(&lt;/span&gt;102ca6bc...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4140947&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
+&lt;span class="o"&gt;[&lt;/span&gt;OK&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="m"&gt;50922208&lt;/span&gt; keys in &lt;span class="m"&gt;12&lt;/span&gt; masters.
+&lt;span class="m"&gt;3108&lt;/span&gt;.04 keys per slot on average.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;redis-trib.rb add-node &lt;span class="m"&gt;10&lt;/span&gt;.240.0.13:6379 &lt;span class="m"&gt;10&lt;/span&gt;.240.0.1:6379
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &amp;amp;gt;&amp;amp;gt;&amp;amp;gt; Adding node 10.240.0.13:6379 to cluster 10.240.0.1:6379
+    &amp;amp;gt;&amp;amp;gt;&amp;amp;gt; Performing Cluster Check (using node 10.240.0.1:6379)
+    M: 4f002e3542ea6a91bfba5352a0f58d439a213a81 10.240.0.1:6379
+    slots:5463-6828 (1366 slots) master
+    0 additional replica(s)
+    ...
+    ...
+    ...
+    [OK] All nodes agree about slots configuration.
+    &amp;amp;gt;&amp;amp;gt;&amp;amp;gt; Check for open slots...
+    &amp;amp;gt;&amp;amp;gt;&amp;amp;gt; Check slots coverage...
+    [OK] All 16384 slots covered.
+    &amp;amp;gt;&amp;amp;gt;&amp;amp;gt; Send CLUSTER MEET to node 10.240.0.13:6379 to make it join the cluster.
+    [OK] New node added correctly.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;4f002e35&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4329319&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;a2d2d8f4&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4523277&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;3&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;b021ccf0&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4206106&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;4&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;0dd0889b&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4421096&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;5&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;d94a5bed&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4252139&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;6&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;3229648e&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4381794&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1359&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;7&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;2bb07de3&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4520956&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1365&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;8&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;44138262&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4177448&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;9&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;fa6af69a&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4442986&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;a5f5e5c5&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4279561&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;13&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;ebadd321&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;11&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;f4d9872d&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4567149&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;12&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;102ca6bc&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4483896&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1366&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="cp"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;OK&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; &lt;span class="nt"&gt;52585715&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="nt"&gt;in&lt;/span&gt; &lt;span class="nt"&gt;13&lt;/span&gt; &lt;span class="nt"&gt;masters&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;3209&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;58&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="nt"&gt;per&lt;/span&gt; &lt;span class="nt"&gt;slot&lt;/span&gt; &lt;span class="nt"&gt;on&lt;/span&gt; &lt;span class="nt"&gt;average&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I want to add 1 more node to the cluster. Then the slots per node will be &lt;code&gt;16384/(12+1) ~ 1260&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    redis-cli -h 10.240.0.13 -p 6379 cluster nodes
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    4f002e3542ea6a91bfba5352a0f58d439a213a81 10.240.0.1:6379 master - 0 1542268658727 20 connected 5568-6828
+    102ca6bc5269221bf29483c906e0f43e8433c437 10.240.0.12:6379 master - 0 1542268659704 18 connected 2837-4096
+    ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c 10.240.0.13:6379 myself,master - 0 0 27 connected
+    a5f5e5c59e5a9ba41de42aff6941224e780fc231 10.240.0.10:6379 master - 0 1542268658240 25 connected 12399-13658
+    a2d2d8f40e60443e24f6fb71101ce7f8eeacf6a1 10.240.0.2:6379 master - 0 1542268658435 22 connected 8300-9560
+    44138262ca209f7b119c8d726921b4261d2ea77a 10.240.0.8:6379 master - 0 1542268658533 21 connected 6935-8194
+    fa6af69a3f0a02c624aa08508973f853c7ae905f 10.240.0.9:6379 master - 0 1542268658045 17 connected 1471-2730
+    d94a5bed1bfb6a79667d5098eb60452771b7b53b 10.240.0.5:6379 master - 0 1542268658045 26 connected 13765-15024
+    f4d9872de81137126376698f757ad477cdaaf5ca 10.240.0.11:6379 master - 0 1542268658923 23 connected 9667-10926
+    2bb07de3a1e71cd5190d49d7cf5ba8c492c23b2c 10.240.0.7:6379 master - 0 1542268658435 16 connected 105-1364
+    b021ccf07f42659fd41b7bdd93ed13c1bf6ba086 10.240.0.3:6379 master - 0 1542268659024 19 connected 4202-5462
+    0dd0889bceb8635a1ff717215c10ef7977795329 10.240.0.4:6379 master - 0 1542268659313 24 connected 11032-12292
+    3229648e1517680ea813735c45c143bc79607328 10.240.0.6:6379 master - 0 1542268659313 29 connected 104 1470 6934 9666 12398 15129-16383
+
+    redis-trib.rb reshard 10.240.0.1:6379
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    How many slots do you want to move (from 1 to 16384)? 1260
+    What is the receiving node ID? ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c
+    Please enter all the source node IDs.
+        Type &amp;#39;all&amp;#39; to use all the nodes as source nodes for the hash slots.
+        Type &amp;#39;done&amp;#39; once you entered all the source nodes IDs.
+    Source node #1:all
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    Do you want to proceed with the proposed reshard plan (yes/no)? yes
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;4f002e35&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4041336&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1261&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;a2d2d8f4&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4050861&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1261&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;3&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;b021ccf0&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;3891858&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1261&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;4&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;0dd0889b&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4017233&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1261&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;5&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;d94a5bed&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4024559&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;6&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;3229648e&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4101075&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;7&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;2bb07de3&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4043998&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;8&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;44138262&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;3953209&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;9&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;fa6af69a&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;3984349&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;a5f5e5c5&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;3924321&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;13&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;ebadd321&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;3837590&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;11&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;f4d9872d&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;4074297&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;240&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;12&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;6379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;102ca6bc&lt;/span&gt;&lt;span class="o"&gt;...)&lt;/span&gt; &lt;span class="nt"&gt;-&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="nt"&gt;gt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;3993498&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;1260&lt;/span&gt; &lt;span class="nt"&gt;slots&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nt"&gt;0&lt;/span&gt; &lt;span class="nt"&gt;slaves&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="cp"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;OK&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; &lt;span class="nt"&gt;51938197&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="nt"&gt;in&lt;/span&gt; &lt;span class="nt"&gt;13&lt;/span&gt; &lt;span class="nt"&gt;masters&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+    &lt;span class="nt"&gt;3170&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;06&lt;/span&gt; &lt;span class="nt"&gt;keys&lt;/span&gt; &lt;span class="nt"&gt;per&lt;/span&gt; &lt;span class="nt"&gt;slot&lt;/span&gt; &lt;span class="nt"&gt;on&lt;/span&gt; &lt;span class="nt"&gt;average&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</content><category term="devops"></category><category term="redis"></category><category term="cluster"></category><category term="scale"></category><category term="tutorial"></category></entry><entry><title>Create &amp; Format a Disk on GCE</title><link href="https://viettran.me/create-n-format-a-disk-on-gce.html" rel="alternate"></link><published>2018-11-08T18:40:00+08:00</published><updated>2018-11-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-08:/create-n-format-a-disk-on-gce.html</id><summary type="html">&lt;p&gt;How to create, format and use a disk on Google Compute Engine.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is the short version to help you do the task. If you want to learn more please check the References at the end of this article.&lt;/p&gt;
+&lt;h2&gt;Create a new disk&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute disks create dev-postgres-master --size=500GB --type=pd-ssd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;dev-postgres-master&lt;/code&gt; is my disk name&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt; can be &lt;code&gt;pd-ssd&lt;/code&gt; or &lt;code&gt;pd-standard&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Create a temporary instance &amp;amp; attach the disk&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute instances create viet-temp
+gcloud compute instances attach-disk viet-temp --disk=dev-postgres-master
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;viet-temp&lt;/code&gt; is my instance name&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dev-postgres-master&lt;/code&gt; is name of the disk created above&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Format the new disk&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;SSH to the instance has the new disk&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute ssh viet-temp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When you're inside the instance:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;List all devices are attached to server&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo lsblk
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You will get the output like this&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    sdb      8:16   0  500G  0 disk
+    sda      8:0    0   64G  0 disk
+    └─sda1   8:1    0   64G  0 part /
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;In this case, my new disk is &lt;code&gt;/dev/sbd&lt;/code&gt;, I will format it with these commands&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
+sudo mkdir -p /data
+sudo mount /dev/sdb /data
+sudo chmod -R 777 /data
+sudo umount /data
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Exit&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Detach the disk &amp;amp; delete the temporary instance&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gcloud compute instances detach-disk viet-temp --disk=dev-postgres-master
+gcloud compute instance delete viet-temp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now, your new disk is ready to use as a &lt;code&gt;ext4&lt;/code&gt; volumne.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"&gt;Adding or Resizing Persistent Disks&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://cloud.google.com/sdk/gcloud/reference/compute/disks/create"&gt;gcloud compute disks create&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</content><category term="devops"></category><category term="gcloud"></category><category term="linux"></category><category term="gcp"></category><category term="gce"></category><category term="vm"></category><category term="disk"></category></entry><entry><title>Setup replication for PostgreSQL</title><link href="https://viettran.me/setup-replication-for-postgresql.html" rel="alternate"></link><published>2018-11-07T20:00:00+08:00</published><updated>2018-11-07T20:00:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-07:/setup-replication-for-postgresql.html</id><summary type="html">&lt;p&gt;How to setup replication for PostgreSQL using hot stanby.&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you want to understand about high availability,load balancing and replication in PostgreSQL, please read the official documentation in the &lt;a href="#References"&gt;References&lt;/a&gt;. In this tutorial, I will show you how to set up a replication server for PostgreSQL using Hot Stanby mode.&lt;/p&gt;
 &lt;h2&gt;Install PostgreSQL&lt;/h2&gt;
 &lt;p&gt;You will need 2 instances of PostgreSQL. For detail please see &lt;a href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html"&gt;Install &amp;amp; configure PostgreSQL on Ubuntu&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Prepare Master Server&lt;/h2&gt;
@@ -174,131 +377,90 @@ sudo chown -R postgres:postgres /data/postgresql
 &lt;li&gt;
 &lt;p&gt;&lt;a href="https://www.postgresql.org/docs/10/high-availability.html"&gt;High Availability, Load Balancing, and Replication (PostgreSQL's official documentation)&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="postgresql"></category><category term="ubuntu"></category><category term="linux"></category><category term="devops"></category><category term="replication"></category><category term="stanby"></category><category term="high availability"></category><category term="load balancing"></category></entry><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-10-08T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;em&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want.&lt;/em&gt;&lt;/p&gt;
+&lt;/ul&gt;</content><category term="postgresql"></category><category term="ubuntu"></category><category term="linux"></category><category term="devops"></category><category term="replication"></category><category term="stanby"></category><category term="high availability"></category><category term="load balancing"></category></entry><entry><title>Install &amp; configure PostgreSQL on Ubuntu</title><link href="https://viettran.me/install-n-configure-postgresql-on-ubuntu.html" rel="alternate"></link><published>2018-10-08T13:40:00+08:00</published><updated>2018-11-25T14:29:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-10-08:/install-n-configure-postgresql-on-ubuntu.html</id><summary type="html">&lt;p&gt;How to install &amp;amp; configure PostgreSQL on Ubuntu.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;em&gt;This tutorial is using &lt;a href="https://en.wikipedia.org/wiki/Vi"&gt;vi&lt;/a&gt; editor. You can use any editor you want.&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Add PostgreSQL repository to &lt;strong&gt;apt&lt;/strong&gt; package list&lt;/h2&gt;
 &lt;p&gt;Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Edit this file&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi /etc/apt/sources.list.d/pgdg.list
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Add this line&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;deb&lt;/span&gt; &lt;span class="s"&gt;http://apt.postgresql.org/pub/repos/apt/&lt;/span&gt; &lt;span class="kp"&gt;xenial-pgdg&lt;/span&gt; &lt;span class="kp"&gt;main&lt;/span&gt;
+&lt;p&gt;Add this line:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;em&gt;Replace &lt;code&gt;xenial&lt;/code&gt; with your Ubuntu code name, I use &lt;code&gt;xenial&lt;/code&gt; because I'm using Ubuntu 16.04 LTS&lt;/em&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Import the repository signing key, and update the package list&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+&lt;p&gt;Import the repository signing key, and update the package list:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc &lt;span class="p"&gt;|&lt;/span&gt; sudo apt-key add -
 sudo apt-get update
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ol&gt;
 &lt;h2&gt;Install PostgreSQL&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
 &lt;p&gt;Our current system requires PostgreSQL 9.5. So I will install version &lt;strong&gt;9.5&lt;/strong&gt;. Replace it with your choice:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;em&gt;From version &lt;strong&gt;10&lt;/strong&gt; you don't have to install &lt;strong&gt;postgresql-contrib-xx&lt;/strong&gt; because it is already added to package &lt;strong&gt;postgresql-xx&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;PostgreSQL created a default user, named &lt;strong&gt;postgres&lt;/strong&gt;, during installation. This user doesn't yet have a password, so you'll need to set one.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Run &lt;strong&gt;PSQL&lt;/strong&gt; as user &lt;strong&gt;postgres&lt;/strong&gt;, instead of &lt;strong&gt;root&lt;/strong&gt;, accesssing the database named &lt;strong&gt;postgres&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;PostgreSQL created a default user, named &lt;strong&gt;postgres&lt;/strong&gt;, during installation. This user doesn't yet have a password, so you'll need to set one.
+Run &lt;strong&gt;PSQL&lt;/strong&gt; as user &lt;strong&gt;postgres&lt;/strong&gt;, instead of &lt;strong&gt;root&lt;/strong&gt;, accesssing the database named &lt;strong&gt;postgres&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u postgres psql postgres
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;You should see the PSQL command prompt, which looks like this: &lt;code&gt;postgres=#&lt;/code&gt;.
-Set the password with this command:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;\password postgres
+&lt;p&gt;You should see the PSQL command prompt, which looks like this: &lt;code&gt;postgres=#&lt;/code&gt;. Set the password with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="se"&gt;\p&lt;/span&gt;assword postgres
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;When prompted, enter and confirm the password you've chosen&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Install the &lt;strong&gt;adminpack&lt;/strong&gt; extension to use with some administration and management tools. The console prints &lt;strong&gt;CREATE EXTENSION&lt;/strong&gt; when successful.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;CREATE EXTENSION adminpack;
+&lt;p&gt;When prompted, enter and confirm the password you've chosen.&lt;/p&gt;
+&lt;p&gt;Install the &lt;strong&gt;adminpack&lt;/strong&gt; extension to use with some administration and management tools.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;CREATE EXTENSION adminpack&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
+&lt;p&gt;The console prints &lt;strong&gt;CREATE EXTENSION&lt;/strong&gt; when successful.&lt;/p&gt;
 &lt;p&gt;Enter &lt;code&gt;\q&lt;/code&gt; to exit &lt;strong&gt;PSQL&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
 &lt;h2&gt;Allow access to PostgreSQL&lt;/h2&gt;
 &lt;p&gt;PostgreSQL only allows access from localhost. We need to change its configuratin to allow remote access.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;Edit &lt;strong&gt;pg_hba.conf&lt;/strong&gt;&lt;/p&gt;
+&lt;h5&gt;Edit &lt;strong&gt;pg_hba.conf&lt;/strong&gt;&lt;/h5&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi /etc/postgresql/9.4/main/pg_hba.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all clients by adding this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# allow access from my internal network with md5 password
-host    all             10.20.0.0/16             all                     md5
+&lt;p&gt;This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all users in my internal network by adding this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# allow access from my internal network with md5 password&lt;/span&gt;
+host    all             &lt;span class="m"&gt;10&lt;/span&gt;.20.0.0/16             all                     md5
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Edit &lt;strong&gt;postgresql.conf&lt;/strong&gt;&lt;/p&gt;
+&lt;h5&gt;Edit &lt;strong&gt;postgresql.conf&lt;/strong&gt;&lt;/h5&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vi /etc/postgresql/9.4/main/postgresql.conf
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Find this &lt;code&gt;#listen_addresses = 'localhost'&lt;/code&gt; &amp;amp; replace with &lt;code&gt;listen_addresses = '*'&lt;/code&gt; to allow access from other servers.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;Save the file &amp;amp; exit. Then restart &lt;strong&gt;postgresql&lt;/strong&gt; service:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo service postgresql restart
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;/ol&gt;
 &lt;h2&gt;Configure PostgreSQL&lt;/h2&gt;
 &lt;p&gt;Below is basic settings for &lt;strong&gt;postgresql.conf&lt;/strong&gt;. Please see &lt;a href="#References"&gt;References&lt;/a&gt; for more detail.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Memory&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;shared_buffers = 3GB         # 1/4 system available RAM
-work_mem = 10MB                 # up to 1/4(RAM)/max_connections
+&lt;h5&gt;Memory&lt;/h5&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;shared_buffers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 3GB         &lt;span class="c1"&gt;# 1/4 system available RAM&lt;/span&gt;
+&lt;span class="nv"&gt;work_mem&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 10MB                 &lt;span class="c1"&gt;# up to 1/4(RAM)/max_connections&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Query turning&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;random_page_cost = 1.5          # using 1.5 or 2.0 for SSD
-effective_cache_size = 10GB     # 3/4 system available RAM or sum of free &amp;amp;amp; cached value from free -h command
+&lt;h5&gt;Query turning&lt;/h5&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;random_page_cost&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;.5          &lt;span class="c1"&gt;# using 1.5 or 2.0 for SSD&lt;/span&gt;
+&lt;span class="nv"&gt;effective_cache_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 10GB     &lt;span class="c1"&gt;# 3/4 system available RAM or sum of free &amp;amp; cached value from free -h command&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Remember to save the file and restart postgresql service.&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;em&gt;Remember to save the file and restart postgresql service.&lt;/em&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;References&lt;/h2&gt;
 &lt;ul&gt;

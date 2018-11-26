@@ -88,128 +88,87 @@
         <p><em>This tutorial is using <a href="https://en.wikipedia.org/wiki/Vi">vi</a> editor. You can use any editor you want.</em></p>
 <h2>Add PostgreSQL repository to <strong>apt</strong> package list</h2>
 <p>Ubuntu comes with a default version of PostgreSQL. If we need to install a specific version, we have to add the PosgreSQL repository to our package list.</p>
-<ol>
-<li>
-<p><strong>Edit this file</strong></p>
 <div class="highlight"><pre><span></span>sudo vi /etc/apt/sources.list.d/pgdg.list
 </pre></div>
 
 
-</li>
-<li>
-<p><strong>Add this line</strong></p>
-<div class="highlight"><pre><span></span><span class="k">deb</span> <span class="s">http://apt.postgresql.org/pub/repos/apt/</span> <span class="kp">xenial-pgdg</span> <span class="kp">main</span>
+<p>Add this line:</p>
+<div class="highlight"><pre><span></span>deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
 </pre></div>
 
 
 <p><em>Replace <code>xenial</code> with your Ubuntu code name, I use <code>xenial</code> because I'm using Ubuntu 16.04 LTS</em></p>
-</li>
-<li>
-<p><strong>Import the repository signing key, and update the package list</strong></p>
-<div class="highlight"><pre><span></span>wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+<p>Import the repository signing key, and update the package list:</p>
+<div class="highlight"><pre><span></span>wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc <span class="p">|</span> sudo apt-key add -
 sudo apt-get update
 </pre></div>
 
 
-</li>
-</ol>
 <h2>Install PostgreSQL</h2>
-<ol>
-<li>
 <p>Our current system requires PostgreSQL 9.5. So I will install version <strong>9.5</strong>. Replace it with your choice:</p>
 <div class="highlight"><pre><span></span>sudo apt-get install -y postgresql-client-9.5 postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
 </pre></div>
 
 
 <p><em>From version <strong>10</strong> you don't have to install <strong>postgresql-contrib-xx</strong> because it is already added to package <strong>postgresql-xx</strong></em></p>
-</li>
-<li>
-<p>PostgreSQL created a default user, named <strong>postgres</strong>, during installation. This user doesn't yet have a password, so you'll need to set one.</p>
-<ul>
-<li>
-<p>Run <strong>PSQL</strong> as user <strong>postgres</strong>, instead of <strong>root</strong>, accesssing the database named <strong>postgres</strong>:</p>
+<p>PostgreSQL created a default user, named <strong>postgres</strong>, during installation. This user doesn't yet have a password, so you'll need to set one.
+Run <strong>PSQL</strong> as user <strong>postgres</strong>, instead of <strong>root</strong>, accesssing the database named <strong>postgres</strong>:</p>
 <div class="highlight"><pre><span></span>sudo -u postgres psql postgres
 </pre></div>
 
 
-</li>
-<li>
-<p>You should see the PSQL command prompt, which looks like this: <code>postgres=#</code>.
-Set the password with this command:</p>
-<div class="highlight"><pre><span></span>\password postgres
+<p>You should see the PSQL command prompt, which looks like this: <code>postgres=#</code>. Set the password with this command:</p>
+<div class="highlight"><pre><span></span><span class="se">\p</span>assword postgres
 </pre></div>
 
 
-<p>When prompted, enter and confirm the password you've chosen</p>
-</li>
-<li>
-<p>Install the <strong>adminpack</strong> extension to use with some administration and management tools. The console prints <strong>CREATE EXTENSION</strong> when successful.</p>
-<div class="highlight"><pre><span></span>CREATE EXTENSION adminpack;
+<p>When prompted, enter and confirm the password you've chosen.</p>
+<p>Install the <strong>adminpack</strong> extension to use with some administration and management tools.</p>
+<div class="highlight"><pre><span></span>CREATE EXTENSION adminpack<span class="p">;</span>
 </pre></div>
 
 
-</li>
-<li>
+<p>The console prints <strong>CREATE EXTENSION</strong> when successful.</p>
 <p>Enter <code>\q</code> to exit <strong>PSQL</strong></p>
-</li>
-</ul>
-</li>
-</ol>
 <h2>Allow access to PostgreSQL</h2>
 <p>PostgreSQL only allows access from localhost. We need to change its configuratin to allow remote access.</p>
-<ol>
-<li>
-<p>Edit <strong>pg_hba.conf</strong></p>
+<h5>Edit <strong>pg_hba.conf</strong></h5>
 <div class="highlight"><pre><span></span>sudo vi /etc/postgresql/9.4/main/pg_hba.conf
 </pre></div>
 
 
-<p>This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all clients by adding this:</p>
-<div class="highlight"><pre><span></span># allow access from my internal network with md5 password
-host    all             10.20.0.0/16             all                     md5
+<p>This file contains a very clear information. You can base on this to add your configuration. In this tutorial, I will allow access from all users in my internal network by adding this:</p>
+<div class="highlight"><pre><span></span><span class="c1"># allow access from my internal network with md5 password</span>
+host    all             <span class="m">10</span>.20.0.0/16             all                     md5
 </pre></div>
 
 
-</li>
-<li>
-<p>Edit <strong>postgresql.conf</strong></p>
+<h5>Edit <strong>postgresql.conf</strong></h5>
 <div class="highlight"><pre><span></span>sudo vi /etc/postgresql/9.4/main/postgresql.conf
 </pre></div>
 
 
 <p>Find this <code>#listen_addresses = 'localhost'</code> &amp; replace with <code>listen_addresses = '*'</code> to allow access from other servers.</p>
-</li>
-<li>
 <p>Save the file &amp; exit. Then restart <strong>postgresql</strong> service:</p>
 <div class="highlight"><pre><span></span>sudo service postgresql restart
 </pre></div>
 
 
-</li>
-</ol>
 <h2>Configure PostgreSQL</h2>
 <p>Below is basic settings for <strong>postgresql.conf</strong>. Please see <a href="#References">References</a> for more detail.</p>
-<ol>
-<li>
-<p><strong>Memory</strong></p>
-<div class="highlight"><pre><span></span>shared_buffers = 3GB         # 1/4 system available RAM
-work_mem = 10MB                 # up to 1/4(RAM)/max_connections
+<h5>Memory</h5>
+<div class="highlight"><pre><span></span><span class="nv">shared_buffers</span> <span class="o">=</span> 3GB         <span class="c1"># 1/4 system available RAM</span>
+<span class="nv">work_mem</span> <span class="o">=</span> 10MB                 <span class="c1"># up to 1/4(RAM)/max_connections</span>
 </pre></div>
 
 
-</li>
-<li>
-<p><strong>Query turning</strong></p>
-<div class="highlight"><pre><span></span>random_page_cost = 1.5          # using 1.5 or 2.0 for SSD
-effective_cache_size = 10GB     # 3/4 system available RAM or sum of free &amp;amp; cached value from free -h command
+<h5>Query turning</h5>
+<div class="highlight"><pre><span></span><span class="nv">random_page_cost</span> <span class="o">=</span> <span class="m">1</span>.5          <span class="c1"># using 1.5 or 2.0 for SSD</span>
+<span class="nv">effective_cache_size</span> <span class="o">=</span> 10GB     <span class="c1"># 3/4 system available RAM or sum of free &amp; cached value from free -h command</span>
 </pre></div>
 
 
-</li>
-<li>
-<p><strong>Remember to save the file and restart postgresql service.</strong></p>
-</li>
-</ol>
+<p><em>Remember to save the file and restart postgresql service.</em></p>
 <hr>
 <h2>References</h2>
 <ul>
