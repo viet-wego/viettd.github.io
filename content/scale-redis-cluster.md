@@ -1,6 +1,6 @@
-Title: Create & Use a Disk on GCE
+Title: Scale out a Redis cluster
 Date: 2018-11-15 18:40
-Modified: 2018-11-15 18:59
+Modified: 2018-11-25 18:59
 Category: devops
 Tags: devops, redis, cluster, scale, tutorial
 Slug: scale-redis-cluster
@@ -13,7 +13,7 @@ Let's check the status of my cluster with this command below.
 
         redis-trib.rb info 10.240.0.1:6379
 
-*Please replace **6379** with your Redis port*
+*Please replace **6379** with your Redis port & **10.240.0.1** with your Redis host.*
 
 The output I receive:
 
@@ -91,7 +91,7 @@ I want to add 1 more node to the cluster. Then the slots per node will be `16384
         0dd0889bceb8635a1ff717215c10ef7977795329 10.240.0.4:6379 master - 0 1542268659313 24 connected 11032-12292
         3229648e1517680ea813735c45c143bc79607328 10.240.0.6:6379 master - 0 1542268659313 29 connected 104 1470 6934 9666 12398 15129-16383
 
-        redis-trib.rb reshard 10.240.0.10:6379
+        redis-trib.rb reshard 10.240.0.1:6379
 
 .
 
@@ -118,7 +118,7 @@ I want to add 1 more node to the cluster. Then the slots per node will be `16384
         10.240.0.8:6379 (44138262...) -> 3953209 keys | 1260 slots | 0 slaves.
         10.240.0.9:6379 (fa6af69a...) -> 3984349 keys | 1260 slots | 0 slaves.
         10.240.0.10:6379 (a5f5e5c5...) -> 3924321 keys | 1260 slots | 0 slaves.
-        10.240.0.52:6379 (ebadd321...) -> 3837590 keys | 1260 slots | 0 slaves.
+        10.240.0.13:6379 (ebadd321...) -> 3837590 keys | 1260 slots | 0 slaves.
         10.240.0.11:6379 (f4d9872d...) -> 4074297 keys | 1260 slots | 0 slaves.
         10.240.0.12:6379 (102ca6bc...) -> 3993498 keys | 1260 slots | 0 slaves.
         [OK] 51938197 keys in 13 masters.
