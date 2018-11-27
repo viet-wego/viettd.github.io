@@ -87,15 +87,22 @@
 </footer><!-- /.post-info -->
 
         <p><strong>Update:</strong> <em>This tutorial is for Redis 3 &amp; 4. With Redis 5 the work can be done with <code>redis-cli</code> tool.</em></p>
-<p>When I first scaled the <a href="https://redis.io/topics/cluster-spec">Redis cluster</a>, I was very worried because I thought it was a difficult task.
-But luckyly <a href="https://redis.io/">Redis team</a> has done a nice work. They provides the <code>redis-trib</code> tool to help us with some cluster tasks.
-This tutorial requires you have a working redis cluster. You also need <a href="https://www.ruby-lang.org/en/">Ruby</a>, and <a href="https://rubygems.org/gems/redis/versions/4.0.3">Redis gem</a> to be install. Remember to choose the compatible version of Redis gem with your Redis version.
-Let's check the status of my cluster with this command below.</p>
+<p>Scaling a <a href="https://redis.io/topics/cluster-spec">Redis cluster</a> sounds like a difficult task to someone never done it before.
+But luckily <a href="https://redis.io/">Redis team</a> has done a nice work. They provides the <code>redis-trib</code> tool to help us with some cluster tasks.
+This tutorial will show you how easy it is.</p>
+<h2>What we need</h2>
+<ul>
+<li>A working <a href="https://redis.io/topics/cluster-spec">Redis cluster</a>.</li>
+<li><a href="https://www.ruby-lang.org/en/">Ruby</a>.</li>
+<li><a href="https://rubygems.org/gems/redis/versions/4.0.3">Redis gem</a>. Remember to choose the compatible version of Redis gem with your Redis version.</li>
+</ul>
+<h2>Let's do it</h2>
+<p>We will start with checking current status of the cluster with this command below.</p>
 <div class="highlight"><pre><span></span>redis-trib.rb info <span class="m">10</span>.20.0.1:6379
 </pre></div>
 
 
-<p><em><strong>6379</strong> is Redis running port of host <strong>10.20.0.1</strong>.</em></p>
+<p><em><code>6379</code> is Redis running port of host <code>10.20.0.1</code>.</em></p>
 <p>We should see something like this:</p>
 <div class="highlight"><pre><span></span><span class="m">10</span>.20.0.1:6379 <span class="o">(</span>4f002e35...<span class="o">)</span> -&gt; <span class="m">4320889</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
 <span class="m">10</span>.20.0.2:6379 <span class="o">(</span>a2d2d8f4...<span class="o">)</span> -&gt; <span class="m">4304402</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
@@ -119,8 +126,8 @@ Let's check the status of my cluster with this command below.</p>
 </pre></div>
 
 
-<p><em><strong>10.20.0.13:6379</strong> is host &amp; port of new node</em>
-The out put is:</p>
+<p><em><code>10.20.0.13:6379</code> is host &amp; port of new node.</em></p>
+<p>The out put is:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; Adding node <span class="m">10</span>.20.0.13:6379 to cluster <span class="m">10</span>.20.0.1:6379
 &gt;&gt;&gt; Performing Cluster Check <span class="o">(</span>using node <span class="m">10</span>.20.0.1:6379<span class="o">)</span>
 M: 4f002e3542ea6a91bfba5352a0f58d439a213a81 <span class="m">10</span>.20.0.1:6379
@@ -200,7 +207,7 @@ Source node <span class="c1">#1:all</span>
 </pre></div>
 
 
-<p>Let it run. In the mean time we can enjoy a coffee. After that we will get the result like this when check cluster status:</p>
+<p>Let it run. In the mean time, we can enjoy a coffee. After it finishs we will get the result like this when check cluster status:</p>
 <div class="highlight"><pre><span></span><span class="m">10</span>.20.0.1:6379 <span class="o">(</span>4f002e35...<span class="o">)</span> -&gt; <span class="m">4041336</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
 <span class="m">10</span>.20.0.2:6379 <span class="o">(</span>a2d2d8f4...<span class="o">)</span> -&gt; <span class="m">4050861</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
 <span class="m">10</span>.20.0.3:6379 <span class="o">(</span>b021ccf0...<span class="o">)</span> -&gt; <span class="m">3891858</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
@@ -219,6 +226,7 @@ Source node <span class="c1">#1:all</span>
 </pre></div>
 
 
+<p>Now our cluster is scaled.</p>
 <hr>
 <h2>References</h2>
 <ul>

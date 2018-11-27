@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Viet Tran</title><link href="https://viettran.me/" rel="alternate"></link><link href="https://viettran.me/feeds/all.atom.xml" rel="self"></link><id>https://viettran.me/</id><updated>2018-11-25T18:59:00+08:00</updated><entry><title>Scale out a Redis cluster</title><link href="https://viettran.me/scale-redis-cluster.html" rel="alternate"></link><published>2018-11-15T18:40:00+08:00</published><updated>2018-11-25T18:59:00+08:00</updated><author><name>Viet Tran</name></author><id>tag:viettran.me,2018-11-15:/scale-redis-cluster.html</id><summary type="html">&lt;p&gt;How to scale out a Redis cluster (add more nodes to the cluster).&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Update:&lt;/strong&gt; &lt;em&gt;This tutorial is for Redis 3 &amp;amp; 4. With Redis 5 the work can be done with &lt;code&gt;redis-cli&lt;/code&gt; tool.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;When I first scaled the &lt;a href="https://redis.io/topics/cluster-spec"&gt;Redis cluster&lt;/a&gt;, I was very worried because I thought it was a difficult task.
-But luckyly &lt;a href="https://redis.io/"&gt;Redis team&lt;/a&gt; has done a nice work. They provides the &lt;code&gt;redis-trib&lt;/code&gt; tool to help us with some cluster tasks.
-This tutorial requires you have a working redis cluster. You also need &lt;a href="https://www.ruby-lang.org/en/"&gt;Ruby&lt;/a&gt;, and &lt;a href="https://rubygems.org/gems/redis/versions/4.0.3"&gt;Redis gem&lt;/a&gt; to be install. Remember to choose the compatible version of Redis gem with your Redis version.
-Let's check the status of my cluster with this command below.&lt;/p&gt;
+&lt;p&gt;Scaling a &lt;a href="https://redis.io/topics/cluster-spec"&gt;Redis cluster&lt;/a&gt; sounds like a difficult task to someone never done it before.
+But luckily &lt;a href="https://redis.io/"&gt;Redis team&lt;/a&gt; has done a nice work. They provides the &lt;code&gt;redis-trib&lt;/code&gt; tool to help us with some cluster tasks.
+This tutorial will show you how easy it is.&lt;/p&gt;
+&lt;h2&gt;What we need&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;A working &lt;a href="https://redis.io/topics/cluster-spec"&gt;Redis cluster&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.ruby-lang.org/en/"&gt;Ruby&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://rubygems.org/gems/redis/versions/4.0.3"&gt;Redis gem&lt;/a&gt;. Remember to choose the compatible version of Redis gem with your Redis version.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Let's do it&lt;/h2&gt;
+&lt;p&gt;We will start with checking current status of the cluster with this command below.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;redis-trib.rb info &lt;span class="m"&gt;10&lt;/span&gt;.20.0.1:6379
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;6379&lt;/strong&gt; is Redis running port of host &lt;strong&gt;10.20.0.1&lt;/strong&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;code&gt;6379&lt;/code&gt; is Redis running port of host &lt;code&gt;10.20.0.1&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;We should see something like this:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;.20.0.1:6379 &lt;span class="o"&gt;(&lt;/span&gt;4f002e35...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4320889&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
 &lt;span class="m"&gt;10&lt;/span&gt;.20.0.2:6379 &lt;span class="o"&gt;(&lt;/span&gt;a2d2d8f4...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4304402&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1366&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
@@ -32,8 +39,8 @@ Let's check the status of my cluster with this command below.&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;10.20.0.13:6379&lt;/strong&gt; is host &amp;amp; port of new node&lt;/em&gt;
-The out put is:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;code&gt;10.20.0.13:6379&lt;/code&gt; is host &amp;amp; port of new node.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The out put is:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; Adding node &lt;span class="m"&gt;10&lt;/span&gt;.20.0.13:6379 to cluster &lt;span class="m"&gt;10&lt;/span&gt;.20.0.1:6379
 &amp;gt;&amp;gt;&amp;gt; Performing Cluster Check &lt;span class="o"&gt;(&lt;/span&gt;using node &lt;span class="m"&gt;10&lt;/span&gt;.20.0.1:6379&lt;span class="o"&gt;)&lt;/span&gt;
 M: 4f002e3542ea6a91bfba5352a0f58d439a213a81 &lt;span class="m"&gt;10&lt;/span&gt;.20.0.1:6379
@@ -113,7 +120,7 @@ Source node &lt;span class="c1"&gt;#1:all&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Let it run. In the mean time we can enjoy a coffee. After that we will get the result like this when check cluster status:&lt;/p&gt;
+&lt;p&gt;Let it run. In the mean time, we can enjoy a coffee. After it finishs we will get the result like this when check cluster status:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;.20.0.1:6379 &lt;span class="o"&gt;(&lt;/span&gt;4f002e35...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4041336&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1261&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
 &lt;span class="m"&gt;10&lt;/span&gt;.20.0.2:6379 &lt;span class="o"&gt;(&lt;/span&gt;a2d2d8f4...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;4050861&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1261&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
 &lt;span class="m"&gt;10&lt;/span&gt;.20.0.3:6379 &lt;span class="o"&gt;(&lt;/span&gt;b021ccf0...&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; &lt;span class="m"&gt;3891858&lt;/span&gt; keys &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;1261&lt;/span&gt; slots &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; slaves.
@@ -132,6 +139,7 @@ Source node &lt;span class="c1"&gt;#1:all&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;p&gt;Now our cluster is scaled.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;References&lt;/h2&gt;
 &lt;ul&gt;
