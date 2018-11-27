@@ -86,128 +86,144 @@
     
 </footer><!-- /.post-info -->
 
-        <h2>To be continued...</h2>
-<p>Let's check the status of my cluster with this command below.</p>
-<div class="highlight"><pre><span></span>    redis-trib.rb info 10.240.0.1:6379
+        <p><strong>Update:</strong> <em>This tutorial is for Redis 3 &amp; 4. With Redis 5 the work can be done with <code>redis-cli</code> tool.</em></p>
+<p>When I first scaled the <a href="https://redis.io/topics/cluster-spec">Redis cluster</a>, I was very worried because I thought it was a difficult task.
+But luckyly <a href="https://redis.io/">Redis team</a> has done a nice work. They provides the <code>redis-trib</code> tool to help us with some cluster tasks.
+This tutorial requires you have a working redis cluster. You also need <a href="https://www.ruby-lang.org/en/">Ruby</a>, and <a href="https://rubygems.org/gems/redis/versions/4.0.3">Redis gem</a> to be install. Remember to choose the compatible version of Redis gem with your Redis version.
+Let's check the status of my cluster with this command below.</p>
+<div class="highlight"><pre><span></span>redis-trib.rb info <span class="m">10</span>.20.0.1:6379
 </pre></div>
 
 
-<p><em>Please replace <strong>6379</strong> with your Redis port &amp; <strong>10.240.0.1</strong> with your Redis host.</em></p>
-<p>The output I receive:</p>
-<div class="highlight"><pre><span></span><span class="m">10</span>.240.0.1:6379 <span class="o">(</span>4f002e35...<span class="o">)</span> -&gt; <span class="m">4320889</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.2:6379 <span class="o">(</span>a2d2d8f4...<span class="o">)</span> -&gt; <span class="m">4304402</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.3:6379 <span class="o">(</span>b021ccf0...<span class="o">)</span> -&gt; <span class="m">4163969</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.4:6379 <span class="o">(</span>0dd0889b...<span class="o">)</span> -&gt; <span class="m">4183495</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.5:6379 <span class="o">(</span>d94a5bed...<span class="o">)</span> -&gt; <span class="m">4269335</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.6:6379 <span class="o">(</span>3229648e...<span class="o">)</span> -&gt; <span class="m">4206758</span> keys <span class="p">|</span> <span class="m">1359</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.7:6379 <span class="o">(</span>2bb07de3...<span class="o">)</span> -&gt; <span class="m">4484283</span> keys <span class="p">|</span> <span class="m">1365</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.8:6379 <span class="o">(</span><span class="m">44138262</span>...<span class="o">)</span> -&gt; <span class="m">4118749</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.9:6379 <span class="o">(</span>fa6af69a...<span class="o">)</span> -&gt; <span class="m">4237922</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.10:6379 <span class="o">(</span>a5f5e5c5...<span class="o">)</span> -&gt; <span class="m">4165017</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.11:6379 <span class="o">(</span>f4d9872d...<span class="o">)</span> -&gt; <span class="m">4326251</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
-<span class="m">10</span>.240.0.12:6379 <span class="o">(</span>102ca6bc...<span class="o">)</span> -&gt; <span class="m">4140947</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<p><em><strong>6379</strong> is Redis running port of host <strong>10.20.0.1</strong>.</em></p>
+<p>We should see something like this:</p>
+<div class="highlight"><pre><span></span><span class="m">10</span>.20.0.1:6379 <span class="o">(</span>4f002e35...<span class="o">)</span> -&gt; <span class="m">4320889</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.2:6379 <span class="o">(</span>a2d2d8f4...<span class="o">)</span> -&gt; <span class="m">4304402</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.3:6379 <span class="o">(</span>b021ccf0...<span class="o">)</span> -&gt; <span class="m">4163969</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.4:6379 <span class="o">(</span>0dd0889b...<span class="o">)</span> -&gt; <span class="m">4183495</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.5:6379 <span class="o">(</span>d94a5bed...<span class="o">)</span> -&gt; <span class="m">4269335</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.6:6379 <span class="o">(</span>3229648e...<span class="o">)</span> -&gt; <span class="m">4206758</span> keys <span class="p">|</span> <span class="m">1359</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.7:6379 <span class="o">(</span>2bb07de3...<span class="o">)</span> -&gt; <span class="m">4484283</span> keys <span class="p">|</span> <span class="m">1365</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.8:6379 <span class="o">(</span><span class="m">44138262</span>...<span class="o">)</span> -&gt; <span class="m">4118749</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.9:6379 <span class="o">(</span>fa6af69a...<span class="o">)</span> -&gt; <span class="m">4237922</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.10:6379 <span class="o">(</span>a5f5e5c5...<span class="o">)</span> -&gt; <span class="m">4165017</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.11:6379 <span class="o">(</span>f4d9872d...<span class="o">)</span> -&gt; <span class="m">4326251</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.12:6379 <span class="o">(</span>102ca6bc...<span class="o">)</span> -&gt; <span class="m">4140947</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
 <span class="o">[</span>OK<span class="o">]</span> <span class="m">50922208</span> keys in <span class="m">12</span> masters.
 <span class="m">3108</span>.04 keys per slot on average.
 </pre></div>
 
 
-<div class="highlight"><pre><span></span>redis-trib.rb add-node <span class="m">10</span>.240.0.13:6379 <span class="m">10</span>.240.0.1:6379
+<p>Here we have 12 masters with 0 slaves. Now we can add new node to current cluster. </p>
+<div class="highlight"><pre><span></span>redis-trib.rb add-node <span class="m">10</span>.20.0.13:6379 <span class="m">10</span>.20.0.1:6379
 </pre></div>
 
 
-<p>.</p>
-<div class="highlight"><pre><span></span>    &amp;gt;&amp;gt;&amp;gt; Adding node 10.240.0.13:6379 to cluster 10.240.0.1:6379
-    &amp;gt;&amp;gt;&amp;gt; Performing Cluster Check (using node 10.240.0.1:6379)
-    M: 4f002e3542ea6a91bfba5352a0f58d439a213a81 10.240.0.1:6379
-    slots:5463-6828 (1366 slots) master
-    0 additional replica(s)
-    ...
-    ...
-    ...
-    [OK] All nodes agree about slots configuration.
-    &amp;gt;&amp;gt;&amp;gt; Check for open slots...
-    &amp;gt;&amp;gt;&amp;gt; Check slots coverage...
-    [OK] All 16384 slots covered.
-    &amp;gt;&amp;gt;&amp;gt; Send CLUSTER MEET to node 10.240.0.13:6379 to make it join the cluster.
-    [OK] New node added correctly.
+<p><em><strong>10.20.0.13:6379</strong> is host &amp; port of new node</em>
+The out put is:</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; Adding node <span class="m">10</span>.20.0.13:6379 to cluster <span class="m">10</span>.20.0.1:6379
+&gt;&gt;&gt; Performing Cluster Check <span class="o">(</span>using node <span class="m">10</span>.20.0.1:6379<span class="o">)</span>
+M: 4f002e3542ea6a91bfba5352a0f58d439a213a81 <span class="m">10</span>.20.0.1:6379
+slots:5463-6828 <span class="o">(</span><span class="m">1366</span> slots<span class="o">)</span> master
+<span class="m">0</span> additional replica<span class="o">(</span>s<span class="o">)</span>
+...
+... &lt;There are more information here&gt; ...
+...
+<span class="o">[</span>OK<span class="o">]</span> All nodes agree about slots configuration.
+&gt;&gt;&gt; Check <span class="k">for</span> open slots...
+&gt;&gt;&gt; Check slots coverage...
+<span class="o">[</span>OK<span class="o">]</span> All <span class="m">16384</span> slots covered.
+&gt;&gt;&gt; Send CLUSTER MEET to node <span class="m">10</span>.20.0.13:6379 to make it join the cluster.
+<span class="o">[</span>OK<span class="o">]</span> New node added correctly.
 </pre></div>
 
 
-<p>.</p>
-<div class="highlight"><pre><span></span>    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">1</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">4f002e35</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4329319</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">2</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">a2d2d8f4</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4523277</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">3</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">b021ccf0</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4206106</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">4</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">0dd0889b</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4421096</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">5</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">d94a5bed</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4252139</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">6</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">3229648e</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4381794</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1359</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">7</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">2bb07de3</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4520956</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1365</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">8</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">44138262</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4177448</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">9</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">fa6af69a</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4442986</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">10</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">a5f5e5c5</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4279561</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">13</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">ebadd321</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">0</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">11</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">f4d9872d</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4567149</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">12</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">102ca6bc</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4483896</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1366</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="cp">[</span><span class="nx">OK</span><span class="cp">]</span> <span class="nt">52585715</span> <span class="nt">keys</span> <span class="nt">in</span> <span class="nt">13</span> <span class="nt">masters</span><span class="o">.</span>
-    <span class="nt">3209</span><span class="p">.</span><span class="nc">58</span> <span class="nt">keys</span> <span class="nt">per</span> <span class="nt">slot</span> <span class="nt">on</span> <span class="nt">average</span><span class="o">.</span>
+<p>Now if we check the cluster status again, we will see that a new node has been added to the cluster.</p>
+<div class="highlight"><pre><span></span><span class="m">10</span>.20.0.1:6379 <span class="o">(</span>4f002e35...<span class="o">)</span> -&gt; <span class="m">4329319</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.2:6379 <span class="o">(</span>a2d2d8f4...<span class="o">)</span> -&gt; <span class="m">4523277</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.3:6379 <span class="o">(</span>b021ccf0...<span class="o">)</span> -&gt; <span class="m">4206106</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.4:6379 <span class="o">(</span>0dd0889b...<span class="o">)</span> -&gt; <span class="m">4421096</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.5:6379 <span class="o">(</span>d94a5bed...<span class="o">)</span> -&gt; <span class="m">4252139</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.6:6379 <span class="o">(</span>3229648e...<span class="o">)</span> -&gt; <span class="m">4381794</span> keys <span class="p">|</span> <span class="m">1359</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.7:6379 <span class="o">(</span>2bb07de3...<span class="o">)</span> -&gt; <span class="m">4520956</span> keys <span class="p">|</span> <span class="m">1365</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.8:6379 <span class="o">(</span><span class="m">44138262</span>...<span class="o">)</span> -&gt; <span class="m">4177448</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.9:6379 <span class="o">(</span>fa6af69a...<span class="o">)</span> -&gt; <span class="m">4442986</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.10:6379 <span class="o">(</span>a5f5e5c5...<span class="o">)</span> -&gt; <span class="m">4279561</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.11:6379 <span class="o">(</span>f4d9872d...<span class="o">)</span> -&gt; <span class="m">4567149</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.12:6379 <span class="o">(</span>102ca6bc...<span class="o">)</span> -&gt; <span class="m">4483896</span> keys <span class="p">|</span> <span class="m">1366</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.13:6379 <span class="o">(</span>ebadd321...<span class="o">)</span> -&gt; <span class="m">0</span> keys <span class="p">|</span> <span class="m">0</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="o">[</span>OK<span class="o">]</span> <span class="m">52585715</span> keys in <span class="m">13</span> masters.
+<span class="m">3209</span>.58 keys per slot on average.
 </pre></div>
 
 
-<p>I want to add 1 more node to the cluster. Then the slots per node will be <code>16384/(12+1) ~ 1260</code></p>
-<div class="highlight"><pre><span></span>    redis-cli -h 10.240.0.13 -p 6379 cluster nodes
+<p>We added 1 node to the cluster. Then we need to assign <code>key hash slots</code> to it. The number of slots per node will be <code>16384/(12+1) ~ 1260</code>.
+Before do it, we need to get the <code>node id</code> of new node:</p>
+<div class="highlight"><pre><span></span>redis-cli -h <span class="m">10</span>.20.0.13 -p <span class="m">6379</span> cluster nodes
 </pre></div>
 
 
-<p>.</p>
-<div class="highlight"><pre><span></span>    4f002e3542ea6a91bfba5352a0f58d439a213a81 10.240.0.1:6379 master - 0 1542268658727 20 connected 5568-6828
-    102ca6bc5269221bf29483c906e0f43e8433c437 10.240.0.12:6379 master - 0 1542268659704 18 connected 2837-4096
-    ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c 10.240.0.13:6379 myself,master - 0 0 27 connected
-    a5f5e5c59e5a9ba41de42aff6941224e780fc231 10.240.0.10:6379 master - 0 1542268658240 25 connected 12399-13658
-    a2d2d8f40e60443e24f6fb71101ce7f8eeacf6a1 10.240.0.2:6379 master - 0 1542268658435 22 connected 8300-9560
-    44138262ca209f7b119c8d726921b4261d2ea77a 10.240.0.8:6379 master - 0 1542268658533 21 connected 6935-8194
-    fa6af69a3f0a02c624aa08508973f853c7ae905f 10.240.0.9:6379 master - 0 1542268658045 17 connected 1471-2730
-    d94a5bed1bfb6a79667d5098eb60452771b7b53b 10.240.0.5:6379 master - 0 1542268658045 26 connected 13765-15024
-    f4d9872de81137126376698f757ad477cdaaf5ca 10.240.0.11:6379 master - 0 1542268658923 23 connected 9667-10926
-    2bb07de3a1e71cd5190d49d7cf5ba8c492c23b2c 10.240.0.7:6379 master - 0 1542268658435 16 connected 105-1364
-    b021ccf07f42659fd41b7bdd93ed13c1bf6ba086 10.240.0.3:6379 master - 0 1542268659024 19 connected 4202-5462
-    0dd0889bceb8635a1ff717215c10ef7977795329 10.240.0.4:6379 master - 0 1542268659313 24 connected 11032-12292
-    3229648e1517680ea813735c45c143bc79607328 10.240.0.6:6379 master - 0 1542268659313 29 connected 104 1470 6934 9666 12398 15129-16383
-
-    redis-trib.rb reshard 10.240.0.1:6379
+<p>Output:</p>
+<div class="highlight"><pre><span></span>4f002e3542ea6a91bfba5352a0f58d439a213a81 <span class="m">10</span>.20.0.1:6379 master - <span class="m">0</span> <span class="m">1542268658727</span> <span class="m">20</span> connected <span class="m">0</span>-1365
+a2d2d8f40e60443e24f6fb71101ce7f8eeacf6a1 <span class="m">10</span>.20.0.2:6379 master - <span class="m">0</span> <span class="m">1542268658435</span> <span class="m">22</span> connected <span class="m">1366</span>-2730
+b021ccf07f42659fd41b7bdd93ed13c1bf6ba086 <span class="m">10</span>.20.0.3:6379 master - <span class="m">0</span> <span class="m">1542268659024</span> <span class="m">19</span> connected <span class="m">2732</span>-4097
+0dd0889bceb8635a1ff717215c10ef7977795329 <span class="m">10</span>.20.0.4:6379 master - <span class="m">0</span> <span class="m">1542268659313</span> <span class="m">24</span> connected <span class="m">4097</span>-5463
+d94a5bed1bfb6a79667d5098eb60452771b7b53b <span class="m">10</span>.20.0.5:6379 master - <span class="m">0</span> <span class="m">1542268658045</span> <span class="m">26</span> connected <span class="m">5464</span>-6829
+3229648e1517680ea813735c45c143bc79607328 <span class="m">10</span>.20.0.6:6379 master - <span class="m">0</span> <span class="m">1542268659313</span> <span class="m">29</span> connected <span class="m">6830</span>-8188
+2bb07de3a1e71cd5190d49d7cf5ba8c492c23b2c <span class="m">10</span>.20.0.7:6379 master - <span class="m">0</span> <span class="m">1542268658435</span> <span class="m">16</span> connected <span class="m">8189</span>-9553
+44138262ca209f7b119c8d726921b4261d2ea77a <span class="m">10</span>.20.0.8:6379 master - <span class="m">0</span> <span class="m">1542268658533</span> <span class="m">21</span> connected <span class="m">9554</span>-10919
+fa6af69a3f0a02c624aa08508973f853c7ae905f <span class="m">10</span>.20.0.9:6379 master - <span class="m">0</span> <span class="m">1542268658045</span> <span class="m">17</span> connected <span class="m">10920</span>-12285
+a5f5e5c59e5a9ba41de42aff6941224e780fc231 <span class="m">10</span>.20.0.10:6379 master - <span class="m">0</span> <span class="m">1542268658240</span> <span class="m">25</span> connected <span class="m">12286</span>-13651
+f4d9872de81137126376698f757ad477cdaaf5ca <span class="m">10</span>.20.0.11:6379 master - <span class="m">0</span> <span class="m">1542268658923</span> <span class="m">23</span> connected <span class="m">13652</span>-15017
+102ca6bc5269221bf29483c906e0f43e8433c437 <span class="m">10</span>.20.0.12:6379 master - <span class="m">0</span> <span class="m">1542268659704</span> <span class="m">18</span> connected <span class="m">15018</span>-16383
+ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c <span class="m">10</span>.20.0.13:6379 myself,master - <span class="m">0</span> <span class="m">0</span> <span class="m">27</span> connected
 </pre></div>
 
 
-<p>.</p>
-<div class="highlight"><pre><span></span>    How many slots do you want to move (from 1 to 16384)? 1260
-    What is the receiving node ID? ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c
-    Please enter all the source node IDs.
-        Type &#39;all&#39; to use all the nodes as source nodes for the hash slots.
-        Type &#39;done&#39; once you entered all the source nodes IDs.
-    Source node #1:all
+<p>The new node has <code>id=ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c</code>. Okay, now we reshard the cluster</p>
+<div class="highlight"><pre><span></span>redis-trib.rb reshard <span class="m">10</span>.20.0.1:6379
 </pre></div>
 
 
-<p>.</p>
-<div class="highlight"><pre><span></span>    Do you want to proceed with the proposed reshard plan (yes/no)? yes
+<p>The command prompt will ask us a few questions. Answer it with our information as below:</p>
+<div class="highlight"><pre><span></span>How many slots <span class="k">do</span> you want to move <span class="o">(</span>from <span class="m">1</span> to <span class="m">16384</span><span class="o">)</span>? <span class="m">1260</span>
+What is the receiving node ID? ebadd3216f2ea34d37c66f4c5cd0fd6edd0df48c
+Please enter all the <span class="nb">source</span> node IDs.
+        Type <span class="s1">&#39;all&#39;</span> to use all the nodes as <span class="nb">source</span> nodes <span class="k">for</span> the <span class="nb">hash</span> slots.
+        Type <span class="s1">&#39;done&#39;</span> once you entered all the <span class="nb">source</span> nodes IDs.
+Source node <span class="c1">#1:all</span>
 </pre></div>
 
 
-<p>.</p>
-<div class="highlight"><pre><span></span>    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">1</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">4f002e35</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4041336</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1261</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">2</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">a2d2d8f4</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4050861</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1261</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">3</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">b021ccf0</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">3891858</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1261</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">4</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">0dd0889b</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4017233</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1261</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">5</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">d94a5bed</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4024559</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">6</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">3229648e</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4101075</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">7</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">2bb07de3</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4043998</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">8</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">44138262</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">3953209</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">9</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">fa6af69a</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">3984349</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">10</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">a5f5e5c5</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">3924321</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">13</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">ebadd321</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">3837590</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">11</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">f4d9872d</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">4074297</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="nt">10</span><span class="p">.</span><span class="nc">240</span><span class="p">.</span><span class="nc">0</span><span class="p">.</span><span class="nc">12</span><span class="p">:</span><span class="nd">6379</span> <span class="o">(</span><span class="nt">102ca6bc</span><span class="o">...)</span> <span class="nt">-</span><span class="o">&amp;</span><span class="nt">gt</span><span class="o">;</span> <span class="nt">3993498</span> <span class="nt">keys</span> <span class="o">|</span> <span class="nt">1260</span> <span class="nt">slots</span> <span class="o">|</span> <span class="nt">0</span> <span class="nt">slaves</span><span class="o">.</span>
-    <span class="cp">[</span><span class="nx">OK</span><span class="cp">]</span> <span class="nt">51938197</span> <span class="nt">keys</span> <span class="nt">in</span> <span class="nt">13</span> <span class="nt">masters</span><span class="o">.</span>
-    <span class="nt">3170</span><span class="p">.</span><span class="nc">06</span> <span class="nt">keys</span> <span class="nt">per</span> <span class="nt">slot</span> <span class="nt">on</span> <span class="nt">average</span><span class="o">.</span>
+<p>Then it will propose a plan to migrate hash slots to new node. We will accept the plan by saying <code>yes</code>.</p>
+<div class="highlight"><pre><span></span>Do you want to proceed with the proposed reshard plan <span class="o">(</span>yes/no<span class="o">)</span>? yes
 </pre></div>
+
+
+<p>Let it run. In the mean time we can enjoy a coffee. After that we will get the result like this when check cluster status:</p>
+<div class="highlight"><pre><span></span><span class="m">10</span>.20.0.1:6379 <span class="o">(</span>4f002e35...<span class="o">)</span> -&gt; <span class="m">4041336</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.2:6379 <span class="o">(</span>a2d2d8f4...<span class="o">)</span> -&gt; <span class="m">4050861</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.3:6379 <span class="o">(</span>b021ccf0...<span class="o">)</span> -&gt; <span class="m">3891858</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.4:6379 <span class="o">(</span>0dd0889b...<span class="o">)</span> -&gt; <span class="m">4017233</span> keys <span class="p">|</span> <span class="m">1261</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.5:6379 <span class="o">(</span>d94a5bed...<span class="o">)</span> -&gt; <span class="m">4024559</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.6:6379 <span class="o">(</span>3229648e...<span class="o">)</span> -&gt; <span class="m">4101075</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.7:6379 <span class="o">(</span>2bb07de3...<span class="o">)</span> -&gt; <span class="m">4043998</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.8:6379 <span class="o">(</span><span class="m">44138262</span>...<span class="o">)</span> -&gt; <span class="m">3953209</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.9:6379 <span class="o">(</span>fa6af69a...<span class="o">)</span> -&gt; <span class="m">3984349</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.10:6379 <span class="o">(</span>a5f5e5c5...<span class="o">)</span> -&gt; <span class="m">3924321</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.11:6379 <span class="o">(</span>f4d9872d...<span class="o">)</span> -&gt; <span class="m">4074297</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.12:6379 <span class="o">(</span>102ca6bc...<span class="o">)</span> -&gt; <span class="m">3993498</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="m">10</span>.20.0.13:6379 <span class="o">(</span>ebadd321...<span class="o">)</span> -&gt; <span class="m">3837590</span> keys <span class="p">|</span> <span class="m">1260</span> slots <span class="p">|</span> <span class="m">0</span> slaves.
+<span class="o">[</span>OK<span class="o">]</span> <span class="m">51938197</span> keys in <span class="m">13</span> masters.
+<span class="m">3170</span>.06 keys per slot on average.
+</pre></div>
+
+
+<hr>
+<h2>References</h2>
+<ul>
+<li><a href="https://redis.io/topics/cluster-tutorial">Redis cluster tutorial</a></li>
+</ul>
 
       </div><!-- /.entry-content -->
 
